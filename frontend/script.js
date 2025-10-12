@@ -200,6 +200,7 @@
 
   try {
     const res = await fetch('https://portfolio2025-lac-delta.vercel.app/api/contact', {
+  // const res = await fetch('https://localhost:5000/api/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -234,7 +235,7 @@
 });
     // Load projects from backend
 async function loadProjects() {
-  const res = await fetch('https://portfolio2025-lac-delta.vercel.app/api/projects');
+  const res = await fetch('/api/projects');
   const projects = await res.json();
 
   const container = document.getElementById('projects');
@@ -255,7 +256,7 @@ async function submitContact(e) {
   const email = document.getElementById('contact-email').value;
   const message = document.getElementById('contact-message').value;
 
-  const res = await fetch('https://portfolio2025-lac-delta.vercel.app/api/contact', {
+  const res = await fetch('/api/contact', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, email, message })
