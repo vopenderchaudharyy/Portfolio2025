@@ -162,7 +162,25 @@
       btn.addEventListener('click', (e) => {
         const plan = btn.getAttribute('data-plan');
         if (plan) {
-          selectedServiceDisplay.textContent = '✓ ' + plan + ' - Selected';
+          // Clear previous selected visuals
+          document.querySelectorAll('.buy.selected').forEach(el => el.classList.remove('selected'));
+          document.querySelectorAll('.price-card.selected').forEach(el => el.classList.remove('selected'));
+          // Reset all button labels
+          document.querySelectorAll('.buy[data-plan]').forEach(el => {
+            el.textContent = 'Choose Plan';
+            el.setAttribute('aria-pressed', 'false');
+          });
+
+          // Set selected visuals on current button and its card
+          btn.classList.add('selected');
+          const card = btn.closest('.price-card');
+          if (card) card.classList.add('selected');
+          btn.textContent = 'Chosen';
+          btn.setAttribute('aria-pressed', 'true');
+
+          const isReelsModeNow = document.getElementById('serviceToggle').classList.contains('active');
+          const serviceTypeNow = isReelsModeNow ? 'Short Form' : 'Long Form';
+          selectedServiceDisplay.textContent = '✓ ' + serviceTypeNow + ': ' + plan + ' - Selected';
           selectedServiceDisplay.style.color = 'var(--accent)';
           selectedServiceDisplay.style.background = 'rgba(76,187,23,0.15)';
           
@@ -171,6 +189,24 @@
           
           // Scroll to form
           document.getElementById('contactForm').scrollIntoView({ behavior: 'smooth' });
+
+          // Remove any pricing highlight pulse once a plan is selected
+          const pricingSection = document.getElementById('pricing');
+          if (pricingSection){
+            pricingSection.classList.remove('highlight-pulse');
+          }
+
+          // Add attention animation to the submit button to guide the next action
+          const submitEl = document.querySelector('#contactForm button[type="submit"]');
+          if (submitEl){
+            const removeAttention = () => submitEl.classList.remove('attention');
+            submitEl.classList.add('attention');
+            // Remove on user interaction
+            submitEl.addEventListener('click', removeAttention, { once: true });
+            document.getElementById('contactForm').addEventListener('input', removeAttention, { once: true });
+            // Auto-remove after 8 seconds as fallback
+            setTimeout(removeAttention, 8000);
+          }
         }
       });
     });
@@ -188,11 +224,33 @@
   // ✅ Get selected plan and current mode
   const selectedPlan = this.getAttribute('data-selected-plan') || 'No plan selected';
   const isReelsMode = document.getElementById('serviceToggle').classList.contains('active');
-  const serviceType = isReelsMode ? 'Instagram Reels' : 'Full Video';
+  const serviceType = isReelsMode ? 'Short Form' : 'Long Form';
 
   const msg = document.getElementById('formMsg');
   const submitBtn = this.querySelector('button[type="submit"]');
   const originalBtnHtml = submitBtn.innerHTML;
+  const selectedServiceDiv = document.getElementById('selectedService');
+  // Clear any attention animation on submit
+  submitBtn.classList.remove('attention');
+
+  // Require plan selection before proceeding
+  if(!this.getAttribute('data-selected-plan') || (this.getAttribute('data-selected-plan') || '').trim() === '' || (this.getAttribute('data-selected-plan') || '') === 'No plan selected'){
+    msg.textContent = '⚠️ Please select a package before submitting your inquiry.';
+    msg.style.color = '#ff6b6b';
+    if (selectedServiceDiv){
+      selectedServiceDiv.textContent = 'Please select a package first';
+      selectedServiceDiv.style.color = '#ff6b6b';
+      selectedServiceDiv.style.background = 'rgba(255,107,107,0.12)';
+      selectedServiceDiv.style.borderColor = 'rgba(255,107,107,0.35)';
+    }
+
+    const pricingSection = document.getElementById('pricing');
+    if (pricingSection){
+      pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      pricingSection.classList.add('highlight-pulse');
+    }
+    return;
+  }
 
   if(!name || !email || !project){
     msg.textContent = '❌ Please fill in all required fields.';
@@ -211,8 +269,8 @@
   Array.from(this.elements).forEach(el => el.disabled = true);
 
   try {
-     const res = await fetch('https://portfolio2025-lac-delta.vercel.app/api/contact', {
-    //const res = await fetch('http://localhost:5000/api/contact', {
+    const res = await fetch('https://portfolio2025-lac-delta.vercel.app/api/contact', {
+    // const res = await fetch('http://localhost:5000/api/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
