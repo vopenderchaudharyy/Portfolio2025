@@ -191,6 +191,8 @@
   const serviceType = isReelsMode ? 'Instagram Reels' : 'Full Video';
 
   const msg = document.getElementById('formMsg');
+  const submitBtn = this.querySelector('button[type="submit"]');
+  const originalBtnHtml = submitBtn.innerHTML;
 
   if(!name || !email || !project){
     msg.textContent = '❌ Please fill in all required fields.';
@@ -198,9 +200,19 @@
     return;
   }
 
+  // Loading state
+  msg.textContent = '⏳ Sending your inquiry...';
+  msg.style.color = 'var(--muted)';
+  submitBtn.disabled = true;
+  submitBtn.style.opacity = '0.7';
+  submitBtn.style.cursor = 'not-allowed';
+  submitBtn.innerHTML = 'Sending...';
+  // Disable all form fields to prevent duplicate submissions
+  Array.from(this.elements).forEach(el => el.disabled = true);
+
   try {
     const res = await fetch('https://portfolio2025-lac-delta.vercel.app/api/contact', {
-  // const res = await fetch('https://localhost:5000/api/contact', {
+    // const res = await fetch('http://localhost:5000/api/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -231,9 +243,17 @@
     console.error(error);
     msg.textContent = '❌ Server not reachable. Please try again later.';
     msg.style.color = '#ff6b6b';
+  } finally {
+    // Restore form state
+    Array.from(this.elements).forEach(el => el.disabled = false);
+    submitBtn.disabled = false;
+    submitBtn.style.opacity = '';
+    submitBtn.style.cursor = '';
+    submitBtn.innerHTML = originalBtnHtml;
   }
 });
-    // Load projects from backend
+
+// Load projects from backend
 async function loadProjects() {
   const res = await fetch('/api/projects');
   const projects = await res.json();
