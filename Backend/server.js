@@ -75,4 +75,12 @@ app.post('/api/contact', async (req, res) => {
   }
 });
 
+app.get('/next', (req, res) => {
+  // You can send a JSON response or plain text
+  res.json({
+    message: "Hello from /nextja endpoint!",
+    status: "success"
+  });
+});
+
 app.listen(process.env.PORT, () => console.log(`🚀 Server running on port ${process.env.PORT}`));
