@@ -75,10 +75,10 @@ app.post('/api/contact', async (req, res) => {
   }
 });
 
-app.get('/next', (req, res) => {
+app.get('/', (req, res) => {
   // You can send a JSON response or plain text
   res.json({
-    message: "Hello from /nextja endpoint!",
+    message: "Hello from /next.js endpoint!",
     status: "success"
   });
 });
