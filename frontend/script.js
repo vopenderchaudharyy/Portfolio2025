@@ -19,6 +19,20 @@
           e.target.classList.add('in');
           io.unobserve(e.target);
         }
+
+  // Sync portrait pop with service card hover/focus
+  const portrait = document.querySelector('.hero-portrait');
+  const serviceCards = document.querySelectorAll('#services .service');
+  if (portrait && serviceCards.length){
+    const add = () => portrait.classList.add('pop');
+    const remove = () => portrait.classList.remove('pop');
+    serviceCards.forEach(card => {
+      card.addEventListener('mouseenter', add);
+      card.addEventListener('mouseleave', remove);
+      card.addEventListener('focusin', add);
+      card.addEventListener('focusout', remove);
+    });
+  }
       }
     }, { rootMargin: '0px 0px -10% 0px', threshold: 0.15 });
 
@@ -38,7 +52,7 @@
     canvas.style.top = '0';
     canvas.style.left = '0';
     canvas.style.pointerEvents = 'none';
-    canvas.style.zIndex = '1';
+    canvas.style.zIndex = '9999';
     document.body.appendChild(canvas);
 
     const ctx = canvas.getContext('2d');
@@ -137,114 +151,81 @@
     // Theme toggle: light/dark
     const rootEl = document.documentElement;
     const themeBtn = document.getElementById('themeToggle');
-    function applyTheme(theme){
-      if(theme === 'light'){
-        rootEl.setAttribute('data-theme','light');
-        if (themeBtn) themeBtn.textContent = 'Dark';
-        currentParticleColors = particleColorsLight;
-      } else {
-        rootEl.removeAttribute('data-theme');
-        if (themeBtn) themeBtn.textContent = 'Light';
-        currentParticleColors = particleColorsDark;
-      }
-    }
-    // Initialize theme
-    const storedTheme = localStorage.getItem('vv-theme');
-    if (storedTheme){
-      applyTheme(storedTheme);
-    } else {
-      const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-      applyTheme(prefersLight ? 'light' : 'dark');
-    }
-    if (themeBtn){
-      themeBtn.addEventListener('click', () => {
-        const isLight = rootEl.getAttribute('data-theme') === 'light';
-        const next = isLight ? 'dark' : 'light';
-        applyTheme(next);
-        localStorage.setItem('vv-theme', next);
-      });
+    const themeBtnMobile = document.getElementById('themeToggleMobile');
+    let systemMql = window.matchMedia ? window.matchMedia('(prefers-color-scheme: light)') : null;
+
+    function setButtonLabels(mode){
+      const label = `Theme: ${mode[0].toUpperCase()+mode.slice(1)}`;
+      if (themeBtn) themeBtn.textContent = label;
+      if (themeBtnMobile) themeBtnMobile.textContent = label;
     }
 
+    function applyThemeMode(mode){
+      // Save mode
+      localStorage.setItem('vv-theme', mode);
+      // Clean previous listener
+      if (systemMql) systemMql.removeEventListener && systemMql.removeEventListener('change', onSystemChange);
+
+      if (mode === 'auto'){
+        const isLight = systemMql ? systemMql.matches : false;
+        if (isLight){
+          rootEl.setAttribute('data-theme','light');
+          currentParticleColors = particleColorsLight;
+        } else {
+          rootEl.removeAttribute('data-theme');
+          currentParticleColors = particleColorsDark;
+        }
+        // Reapply when system changes
+        if (systemMql) systemMql.addEventListener && systemMql.addEventListener('change', onSystemChange);
+      } else if (mode === 'light'){
+        rootEl.setAttribute('data-theme','light');
+        currentParticleColors = particleColorsLight;
+      } else { // dark
+        rootEl.removeAttribute('data-theme');
+        currentParticleColors = particleColorsDark;
+      }
+      setButtonLabels(mode);
+    }
+
+    function onSystemChange(){
+      const mode = localStorage.getItem('vv-theme') || 'auto';
+      if (mode === 'auto') applyThemeMode('auto');
+    }
+
+    // Initialize theme (default to auto if none)
+    const storedTheme = localStorage.getItem('vv-theme');
+    if (storedTheme){
+      applyThemeMode(storedTheme);
+    } else {
+      applyThemeMode('auto');
+    }
+
+    // Cycle through Light -> Dark -> Auto
+    const toggleThemeMode = () => {
+      const mode = localStorage.getItem('vv-theme') || 'auto';
+      const next = mode === 'light' ? 'dark' : (mode === 'dark' ? 'auto' : 'light');
+      applyThemeMode(next);
+    };
+    if (themeBtn){ themeBtn.addEventListener('click', toggleThemeMode); }
+    if (themeBtnMobile){ themeBtnMobile.addEventListener('click', toggleThemeMode); }
+
     // Toggle Switch Functionality
-    const toggle = document.getElementById('serviceToggle');
+    const toggleService = document.getElementById('serviceToggle');
     const videoPricing = document.getElementById('videoPricing');
     const reelsPricing = document.getElementById('reelsPricing');
     let isReelsMode = false;
-
-    if (toggle){
-      toggle.addEventListener('click', () => {
+    if (toggleService){
+      toggleService.addEventListener('click', () => {
         isReelsMode = !isReelsMode;
-        toggle.classList.toggle('active');
-        
-        if (isReelsMode) {
-          videoPricing.style.display = 'none';
-          reelsPricing.style.display = 'block';
+        if (isReelsMode){
+          if (videoPricing) videoPricing.style.display = 'none';
+          if (reelsPricing) reelsPricing.style.display = '';
         } else {
-          videoPricing.style.display = 'block';
-          reelsPricing.style.display = 'none';
+          if (videoPricing) videoPricing.style.display = '';
+          if (reelsPricing) reelsPricing.style.display = 'none';
         }
+        toggleService.classList.toggle('active');
       });
-    }
-
-    // Currency via country select: update package prices and budget placeholder
-    const currencySelect = document.getElementById('currencySelect');
-    const budgetInput = document.getElementById('budget');
-    const currencyState = { code: 'USD', rate: 1, symbol: '$', locale: 'en-US', maxFrac: 0 };
-    const currencyMeta = {
-      USD: { symbol: '$', locale: 'en-US', maxFrac: 0 },
-      INR: { symbol: '₹', locale: 'en-IN', maxFrac: 0 },
-      EUR: { symbol: '€', locale: 'de-DE', maxFrac: 0 },
-      GBP: { symbol: '£', locale: 'en-GB', maxFrac: 0 },
-      AED: { symbol: 'د.إ', locale: 'ar-AE', maxFrac: 0 },
-      KWD: { symbol: 'د.ك', locale: 'ar-KW', maxFrac: 0 }
-    };
-    function parseUSD(v){
-      const n = Number(String(v).replace(/[^0-9.]/g,'') || '0');
-      return isFinite(n) ? n : 0;
-    }
-    function fmt(n){
-      try{ return new Intl.NumberFormat(currencyState.locale, { maximumFractionDigits: currencyState.maxFrac }).format(n); }
-      catch(e){ return Math.round(n).toString(); }
-    }
-    function renderPrices(){
-      document.querySelectorAll('#pricing .price').forEach(el => {
-        if (!el.dataset.usd){ el.dataset.usd = String(parseUSD(el.textContent)); }
-        const usd = Number(el.dataset.usd || '0');
-        const converted = usd * currencyState.rate;
-        el.textContent = currencyState.symbol + fmt(converted);
-      });
-      if (budgetInput){
-        budgetInput.placeholder = `e.g. ${currencyState.symbol}${fmt(2000)} - ${currencyState.symbol}${fmt(5000)}`;
-      }
-      const form = document.getElementById('contactForm');
-      if (form){
-        form.setAttribute('data-currency-code', currencyState.code);
-        form.setAttribute('data-currency-rate', String(currencyState.rate));
-        if (currencySelect){
-          const opt = currencySelect.options[currencySelect.selectedIndex];
-          const region = opt ? (opt.getAttribute('data-region') || '') : '';
-          form.setAttribute('data-currency-region', region);
-        }
-      }
-    }
-    async function setCurrency(code){
-      currencyState.code = code;
-      const meta = currencyMeta[code] || currencyMeta.USD;
-      currencyState.symbol = meta.symbol; currencyState.locale = meta.locale; currencyState.maxFrac = meta.maxFrac;
-      // get rate vs USD
-      if (code === 'USD'){ currencyState.rate = 1; renderPrices(); return; }
-      try{
-        const r = await fetch(`https://api.exchangerate.host/latest?base=USD&symbols=${encodeURIComponent(code)}`, { mode: 'cors' });
-        const d = r.ok ? await r.json() : null;
-        currencyState.rate = d && d.rates && d.rates[code] ? d.rates[code] : 1;
-      }catch(e){ currencyState.rate = 1; }
-      renderPrices();
-    }
-    if (currencySelect){
-      setCurrency(currencySelect.value);
-      currencySelect.addEventListener('change', () => setCurrency(currencySelect.value));
-    } else {
-      renderPrices();
     }
 
     // Plan Selection
@@ -595,4 +576,83 @@ document.addEventListener('DOMContentLoaded', () => {
       if (reelsCarousel) reelsCarousel.classList.add('fit');
     }
   }
+
+  // Count-up animation for stats when visible
+  const counters = document.querySelectorAll('.stat h3[data-target]');
+  if (counters.length){
+    const animate = (el) => {
+      const target = Number(el.getAttribute('data-target') || '0');
+      const suffix = el.getAttribute('data-suffix') || '';
+      const start = 0; const duration = 1200; let startTs;
+      const tick = (ts) => {
+        if (!startTs) startTs = ts;
+        const p = Math.min((ts - startTs) / duration, 1);
+        const val = Math.round(start + (target - start) * p);
+        el.textContent = String(val) + (suffix || '');
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+    const io = ('IntersectionObserver' in window) ? new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting){
+          const el = e.target; io.unobserve(el); animate(el);
+        }
+      });
+    }, { threshold: 0.4 }) : null;
+    counters.forEach(el => { if (io) io.observe(el); else animate(el); });
+  }
+
+  // Showcase Reel button: blink until user clicks
+  const showcaseBtn = document.getElementById('showcaseBtn');
+  if (showcaseBtn){
+    showcaseBtn.classList.add('blink');
+    const stopBlink = () => showcaseBtn.classList.remove('blink');
+    showcaseBtn.addEventListener('click', stopBlink, { once: true });
+    showcaseBtn.addEventListener('pointerdown', stopBlink, { once: true });
+    showcaseBtn.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') stopBlink(); }, { once: true });
+  }
+
+  // Portrait pop only when hovering Cinematic/Advanced services
+  (() => {
+    const portrait = document.querySelector('.hero-portrait');
+    if (!portrait) return;
+    const titles = Array.from(document.querySelectorAll('#services .service h4'));
+    const targetCards = titles
+      .filter(h4 => /cinematic|advanced/i.test(h4.textContent || ''))
+      .map(h4 => h4.closest('.service'))
+      .filter(Boolean);
+    if (!targetCards.length) return;
+    const add = () => portrait.classList.add('pop');
+    const remove = () => portrait.classList.remove('pop');
+    targetCards.forEach(card => {
+      card.addEventListener('mouseenter', add);
+      card.addEventListener('mouseleave', remove);
+      card.addEventListener('focusin', add);
+      card.addEventListener('focusout', remove);
+    });
+  })();
+
+  // Back-to-top FAB show/hide when near bottom/contact
+  (() => {
+    const fab = document.getElementById('backTopFab');
+    if (!fab) return;
+    const contact = document.getElementById('contact');
+    const show = () => fab.classList.add('show');
+    const hide = () => fab.classList.remove('show');
+    const check = () => {
+      const y = window.scrollY || window.pageYOffset;
+      const h = window.innerHeight;
+      if (contact){
+        const top = contact.getBoundingClientRect().top + y;
+        if (y + h * 0.5 >= top) show(); else hide();
+      } else {
+        // fallback: show after 600px scroll
+        if (y > 600) show(); else hide();
+      }
+    };
+    window.addEventListener('scroll', check, { passive: true });
+    window.addEventListener('resize', check);
+    check();
+  })();
 });

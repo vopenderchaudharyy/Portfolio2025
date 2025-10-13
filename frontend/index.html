@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <a id="top" style="position:absolute;top:0;left:0;height:0;width:0;overflow:hidden"></a>
   <div class="wrap">
     <header>
       <div class="brand">
@@ -33,22 +34,15 @@
       <section class="hero">
         <div class="hero-left">
           <h1>Transform Raw Footage Into Cinematic Masterpieces</h1>
-          <p class="lead">Professional video editing, color grading, and post-production services for creators, businesses, and brands. With 2.5+ years of industry experience and 120+ completed projects, we deliver stunning visual content.</p>
+          <p class="lead">Professional video editing, color grading, and post-production services for creators, businesses, and brands. With 2+ years of industry experience and 100+ completed projects, we deliver stunning visual content.</p>
           <div class="hero-actions">
             <a class="btn primary" href="#contact">Start Your Project</a>
             <a class="btn" href="#portfolio">View Portfolio</a>
+            <a class="btn" id="showcaseBtn" href="https://drive.google.com/file/d/1brFBZhtO5QPvyrY1Y33knNM4_YkU_U34/view?usp=sharing" target="_blank" rel="noopener">Play Showcase Reel</a>
           </div>
-
-          <div class="feature-row">
-            <span class="chip">🎬 Premiere Pro & After Effects</span>
-            <span class="chip">🎨 4K Color Grading</span>
-            <span class="chip">✨ VFX & Motion Graphics</span>
-            <span class="chip">🔊 Professional Audio Design</span>
-          </div>
-        </div>
-
+          <img id="heroPortrait" class="hero-portrait" src="assets/me.png" alt="Vopender Chaudhary" loading="eager" decoding="async" />
       <aside class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid rgba(76,187,23,0.1)">
+        <div class="metrics-bar" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid rgba(76,187,23,0.1)">
           <div>
               <div style="font-size:13px;color:var(--muted)">Next Available</div>
               <div style="font-weight:700;font-size:18px;color:var(--accent)">1 Week</div>
@@ -60,9 +54,9 @@
           </div>
 
           <div class="stats">
-            <div class="stat"><h3>100+</h3><p>Projects</p></div>
-            <div class="stat"><h3>95%</h3><p>Satisfied</p></div>
-            <div class="stat"><h3>2+ years</h3><p>Experience</p></div>
+            <div class="stat"><h3 data-target="100" data-suffix="+">0</h3><p>Projects</p></div>
+            <div class="stat"><h3 data-target="95" data-suffix="%">0</h3><p>Satisfied</p></div>
+            <div class="stat"><h3 data-target="2" data-suffix="+ years">0</h3><p>Experience</p></div>
           </div>
         </aside>
       </section>
@@ -80,12 +74,12 @@
           <div class="service">
             <div class="service-icon">🎬</div>
             <h4>Intermediate Edit</h4>
-            <p>Advanced transitions, professional audio sync, color grading, subtitles, and minor motion graphics animations.</p>
+            <p>Advanced transitions, professional audio sync, color grading, subtitles, and minor motion graphics, green screen.</p>
           </div>
           <div class="service">
             <div class="service-icon">🎥</div>
             <h4>Cinematic / Advanced</h4>
-            <p>Full cinematic color grading, sound design, VFX, motion graphics, trailers, and storytelling-focused edits.</p>
+            <p>Full cinematic color grading, sound design, motion graphics, trailers, and storytelling-focused edits.</p>
           </div>
           <div class="service">
             <div class="service-icon">🎞️</div>
@@ -220,7 +214,7 @@
           <div class="reels-track">
             <div class="reel"><iframe width="100%" src="https://www.youtube.com/embed/jctEYsLQ91k?si=3ZxDADomO1wFFPy_" title="Reel 1" frameborder="0" allowfullscreen></iframe></div>
             <div class="reel"><iframe width="100%" src="https://www.youtube.com/embed/UjVk_dIHy44?feature=share" title="Reel 2" frameborder="0" allowfullscreen></iframe></div>
-            <div class="reel"><iframe width="100%" src="https://www.youtube.com/embed/pqMjDlPeX-M?feature=share" title="Reel 3" frameborder="0" allowfullscreen></iframe></div>
+            <div class="reel"><iframe width="100%" src="https://www.youtube.com/embed/t9X75WIqNmM?feature=share" title="Reel 3" frameborder="0" allowfullscreen></iframe></div>
             <div class="reel"><iframe width="100%" src="https://www.youtube.com/embed/LjPFFbNtVUI?si=rAI00VlXS82njPHg" title="Reel 4" frameborder="0" allowfullscreen></iframe></div>
           </div>
           <button class="reels-nav next" aria-label="Next reels">›</button>
@@ -309,6 +303,7 @@
                 <li>Advanced transitions</li>
                 <li>Color grading</li>
                 <li>Motion graphics</li>
+                 <li>24-48hr turnaround</li>
                 <li>Unlimited revision rounds</li>
               </ul>
               <a class="buy" href="#contact" data-plan="Intermediate Reels">Choose Plan</a>
@@ -323,6 +318,7 @@
                 <li>Motion Graphics</li>
                 <li>Advanced effects</li>
                 <li>Sound design</li>
+                 <li>48-72hr turnaround</li>
                 <li>Unlimited revision rounds</li>
               </ul>
               <a class="buy" href="#contact" data-plan="Advanced Reels">Choose Plan</a>
@@ -373,8 +369,8 @@
             <div class="info-box">
               <h3>Contact us</h3>
               <div class="socials">
-                <a href="#">YouTube</a>
-                <a href="#">Instagram</a>
+                <a href="https://youtube.com/@gaon.ka.editor?si=qx0CwjP-nKTof7ad">YouTube</a>
+                <a href="https://www.instagram.com/gaon.ka.editor/">Instagram</a>
                 <a href="https://wa.me/918894616815" target="_blank" rel="noopener">WhatsApp</a>
               </div>
 
@@ -396,6 +392,15 @@
                 <div class="promise-title">Our Promise</div>
                 <div class="promise-text">Every frame matters. We collaborate closely from concept to final cut to craft visuals that move your audience and elevate your brand.</div>
               </div>
+
+              <!-- Software badges (Premiere Pro, After Effects, Photoshop) -->
+              <div class="software-stack" aria-label="Tools">
+                <span class="soft soft-pr" title="Adobe Premiere Pro">Pr</span>
+                <span class="soft soft-ae" title="Adobe After Effects">Ae</span>
+                <span class="soft soft-ps" title="Adobe Photoshop">Ps</span>
+                <span class="soft soft-dr" title="DaVinci Resolve">DR</span>
+                <span class="soft soft-lr" title="Adobe Lightroom">Lr</span>
+              </div>
             </div>
           </aside>
         </div>
@@ -408,6 +413,8 @@
       <div style="font-size:12px;color:#666">Based in Satna, Madhya Pradesh • Serving clients worldwide</div>
     </footer>
   </div>
+  <!-- Floating Back to Top button at bottom-right -->
+  <a href="#top" id="backTopFab" class="backtop-fab" aria-label="Back to top">↑</a>
   <script src="script.js"></script>
 </body>
 </html>
