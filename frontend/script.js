@@ -440,6 +440,81 @@ document.addEventListener('DOMContentLoaded', () => {
     legacyForm.addEventListener('submit', submitContact);
   }
 
+  // Currency handling: update prices and form metadata when user selects a currency
+  (function initCurrency(){
+    const currencySelect = document.getElementById('currencySelect');
+    const form = document.getElementById('contactForm');
+    if (!form) return;
+    const budgetInput = document.getElementById('budget');
+
+    // Currency meta and fallback rates vs USD
+    const currencyMeta = {
+      USD: { symbol: '$',  locale: 'en-US', maxFrac: 2 },
+      INR: { symbol: '₹',  locale: 'en-IN', maxFrac: 0 },
+      EUR: { symbol: '€',  locale: 'de-DE', maxFrac: 2 },
+      GBP: { symbol: '£',  locale: 'en-GB', maxFrac: 2 },
+      AED: { symbol: 'د.إ', locale: 'ar-AE', maxFrac: 2 },
+      KWD: { symbol: 'د.ك', locale: 'ar-KW', maxFrac: 3 }
+    };
+    const defaultRates = { USD: 1, INR: 87, EUR: 0.92, GBP: 0.78, AED: 3.67, KWD: 0.31 };
+
+    const state = { code: 'USD', symbol: '$', locale: 'en-US', maxFrac: 2, rate: 1 };
+
+    function parseUSD(v){
+      const n = Number(String(v).replace(/[^0-9.]/g,'') || '0');
+      return isFinite(n) ? n : 0;
+    }
+    function fmt(n){
+      try{ return new Intl.NumberFormat(state.locale, { maximumFractionDigits: state.maxFrac }).format(n); }
+      catch(e){ return Math.round(n).toString(); }
+    }
+    function renderPrices(){
+      document.querySelectorAll('#pricing .price').forEach(el => {
+        if (!el.dataset.usd){ el.dataset.usd = String(parseUSD(el.textContent)); }
+        const usd = Number(el.dataset.usd || '0');
+        const converted = usd * state.rate;
+        el.textContent = state.symbol + fmt(converted);
+      });
+      if (budgetInput){
+        budgetInput.placeholder = `e.g. ${state.symbol}${fmt(2000)} - ${state.symbol}${fmt(5000)}`;
+      }
+      // Expose to form for email backend
+      form.setAttribute('data-currency-code', state.code);
+      form.setAttribute('data-currency-rate', String(state.rate));
+      if (currencySelect){
+        const opt = currencySelect.options[currencySelect.selectedIndex];
+        const region = opt ? (opt.getAttribute('data-region') || '') : '';
+        form.setAttribute('data-currency-region', region);
+      }
+    }
+    async function setCurrency(code){
+      const meta = currencyMeta[code] || currencyMeta.USD;
+      state.code = code; state.symbol = meta.symbol; state.locale = meta.locale; state.maxFrac = meta.maxFrac;
+      // use fallback rate immediately
+      state.rate = defaultRates[code] ?? 1;
+      renderPrices();
+      // refine using live rate; ignore errors
+      if (code === 'USD') return;
+      try{
+        const r = await fetch(`https://api.exchangerate.host/latest?base=USD&symbols=${encodeURIComponent(code)}`, { mode: 'cors' });
+        if (r.ok){
+          const d = await r.json();
+          const live = d && d.rates && d.rates[code];
+          if (typeof live === 'number' && Math.abs(live - state.rate) > 1e-6){
+            state.rate = live; renderPrices();
+          }
+        }
+      }catch(e){ /* keep fallback */ }
+    }
+
+    if (currencySelect){
+      setCurrency(currencySelect.value);
+      currencySelect.addEventListener('change', () => setCurrency(currencySelect.value));
+    } else {
+      renderPrices();
+    }
+  })();
+
   // Generic carousel nav (reels, reviews)
   function attachCarousel(rootSelector, itemSelector, trackSelector, prevSel, nextSel){
     const root = document.querySelector(rootSelector);
