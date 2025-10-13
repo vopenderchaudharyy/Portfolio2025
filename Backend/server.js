@@ -30,10 +30,21 @@ const transporter = nodemailer.createTransport({
 // ✅ POST route for form submission
 app.post('/api/contact', async (req, res) => {
   try {
-    const { name, email, phone, project, budget, selectedPlan, serviceType } = req.body;
+    const { name, email, phone, project, budget, selectedPlan, serviceType, currencyCode, currencyRate, currencyRegion } = req.body;
+
+    // helpers for formatting
+    const symbols = { USD: '$', INR: '₹', EUR: '€', GBP: '£', AED: 'د.إ', KWD: 'د.ك' };
+    const locales = { USD: 'en-US', INR: 'en-IN', EUR: 'de-DE', GBP: 'en-GB', AED: 'ar-AE', KWD: 'ar-KW' };
+    const sym = symbols[currencyCode] || '$';
+    const loc = locales[currencyCode] || 'en-US';
+    const fmt = (n) => {
+      try{ return new Intl.NumberFormat(loc, { maximumFractionDigits: 0 }).format(Number(n || 0)); }
+      catch(e){ return String(n || ''); }
+    };
+    const budgetDisplay = budget ? `${sym}${fmt(budget)}` : 'N/A';
 
     // Save in MongoDB
-    const inquiry = new Inquiry({ name, email, phone, project, budget, selectedPlan, serviceType });
+    const inquiry = new Inquiry({ name, email, phone, project, budget, selectedPlan, serviceType, currencyCode, currencyRate, currencyRegion });
     await inquiry.save();
 
     // Email to Admin (HTML)
@@ -77,12 +88,16 @@ app.post('/api/contact', async (req, res) => {
                     <td style="padding:8px 0;color:#e6eef6">${serviceType || 'N/A'}</td>
                   </tr>
                   <tr>
+                    <td style="padding:8px 0;color:#4CBB17;font-weight:700">Region / Currency</td>
+                    <td style="padding:8px 0;color:#e6eef6">${currencyRegion || 'N/A'} (${currencyCode || 'USD'})</td>
+                  </tr>
+                  <tr>
                     <td style="padding:8px 0;color:#4CBB17;font-weight:700">Selected Plan</td>
                     <td style="padding:8px 0;color:#e6eef6">${selectedPlan || 'N/A'}</td>
                   </tr>
                   <tr>
                     <td style="padding:8px 0;color:#4CBB17;font-weight:700">Budget</td>
-                    <td style="padding:8px 0;color:#e6eef6">${budget || 'N/A'}</td>
+                    <td style="padding:8px 0;color:#e6eef6">${budgetDisplay}</td>
                   </tr>
                 </table>
 
