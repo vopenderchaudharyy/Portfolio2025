@@ -20,15 +20,37 @@
           <div style="font-size:12px;color:var(--muted)">Premium Video Production</div>
         </div>
       </div>
+      <button id="hamburgerBtn" class="hamburger" aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
       <nav>
         <a href="#services">Services</a>
         <a href="#portfolio">Portfolio</a>
         <a href="#pricing">Pricing</a>
-        <a href="#contact">Contact</a>
+        <a href="#contact" data-scroll="bottom">Contact</a>
         <button id="themeToggle" class="btn" type="button" style="padding:8px 12px">Light</button>
         <a class="cta" href="#contact">Get Quote</a>
       </nav>
     </header>
+
+    <div id="mobileOverlay" aria-hidden="true"></div>
+    <div id="mobileMenu" role="dialog" aria-modal="true" aria-labelledby="mobileMenuTitle">
+      <div class="mobile-menu-inner">
+        <div class="mobile-menu-header">
+          <div id="mobileMenuTitle" class="mobile-title">Menu</div>
+          <button id="mobileClose" class="hamburger close" aria-label="Close menu"><span></span><span></span></button>
+        </div>
+        <div class="mobile-links">
+          <a href="#top" data-nav>Home</a>
+          <a href="#services" data-nav>Services</a>
+          <a href="#portfolio" data-nav>Portfolio</a>
+          <a href="#pricing" data-nav>Pricing</a>
+          <a href="#contact" data-nav data-scroll="bottom">Contact</a>
+          <a class="cta" href="#contact" data-nav>Get Quote</a>
+          <button id="themeToggleMobile" class="btn" type="button">Theme</button>
+        </div>
+      </div>
+    </div>
 
     <main>
       <section class="hero">
@@ -224,14 +246,22 @@
       <section id="pricing">
         <h2 class="section-title">Pricing & Packages</h2>
 
-        <div class="toggle-container">
+        <!-- Mode buttons: Single / Bundle / Trailer -->
+        <div class="pricing-modes" role="tablist" aria-label="Pricing modes">
+          <button class="mode-btn active" id="modeSingle" data-mode="single" role="tab" aria-selected="true">Single Video</button>
+          <button class="mode-btn" id="modeBundle" data-mode="bundle" role="tab" aria-selected="false">Bundle</button>
+          <button class="mode-btn" id="modeTrailer" data-mode="trailer" role="tab" aria-selected="false">Trailer</button>
+        </div>
+
+        <!-- Shared Long/Short toggle (applies to Single and Bundle) -->
+        <div class="toggle-container" id="formToggleContainer">
           <span class="toggle-label">Long Form</span>
-          <div class="toggle-switch" id="serviceToggle"></div>
+          <div class="toggle-switch" id="serviceToggle" aria-label="Toggle Long/Short"></div>
           <span class="toggle-label">Short Form</span>
         </div>
 
-        <!-- VIDEO PRICING -->
-        <div id="videoPricing" class="pricing-section">
+        <!-- SINGLE: reuse existing Long (Video) and Short (Reels) pricing -->
+        <div id="videoPricing" class="pricing-section" data-scope="single">
           <div class="pricing">
             <div class="price-card">
               <div style="font-weight:800;font-size:16px">Basic Video</div>
@@ -262,7 +292,7 @@
             </div>
 
             <div class="price-card">
-              <div style="font-weight:800;font-size:16px">Cinematic Video</div>
+              <div style="font-weight:800;font-size:16px">Advance Video</div>
               <div class="price">$65</div>
               <ul class="price-features">
                 <li>1 min video</li>
@@ -277,8 +307,7 @@
           </div>
         </div>
 
-        <!-- REELS PRICING -->
-        <div id="reelsPricing" class="pricing-section" style="display:none">
+        <div id="reelsPricing" class="pricing-section" data-scope="single" style="display:none">
           <div class="pricing">
             <div class="price-card">
               <div style="font-weight:800;font-size:16px">Basic Reels</div>
@@ -326,6 +355,117 @@
           </div>
         </div>
 
+        <!-- BUNDLE: Short Form (Reels) -->
+        <div id="bundleReelsPricing" class="pricing-section" data-scope="bundle" style="display:none">
+          <div class="pricing">
+            <div class="price-card">
+              <div style="font-weight:800;font-size:16px">Bundle Basic • 20 Reels</div>
+              <div class="price">$285</div>
+              <ul class="price-features">
+                <li>20 short-form videos</li>
+                <li>Optimized for Reels/Shorts</li>
+                <li>Basic transitions & captions</li>
+              </ul>
+              <a class="buy" href="#contact" data-plan="Bundle Reels Basic (20 videos)">Choose Plan</a>
+            </div>
+
+            <div class="price-card featured">
+              <div class="badge">BEST VALUE</div>
+              <div style="font-weight:800;font-size:16px">Bundle Intermediate • 20 Reels</div>
+              <div class="price">$485</div>
+              <ul class="price-features">
+                <li>20 short-form videos</li>
+                <li>Advanced transitions & grading</li>
+                <li>Motion graphics</li>
+              </ul>
+              <a class="buy" href="#contact" data-plan="Bundle Reels Intermediate (20 videos)">Choose Plan</a>
+            </div>
+
+            <div class="price-card">
+              <div style="font-weight:800;font-size:16px">Bundle Advance • 20 Reels</div>
+              <div class="price">$1075</div>
+              <ul class="price-features">
+                <li>20 short-form videos</li>
+                <li>Premium effects & sound design</li>
+                <li>Priority delivery</li>
+              </ul>
+              <a class="buy" href="#contact" data-plan="Bundle Reels Advance (20 videos)">Choose Plan</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- BUNDLE: Long Form (4 videos per month) -->
+        <div id="bundleLongPricing" class="pricing-section" data-scope="bundle" style="display:none">
+          <div class="pricing">
+            <div class="price-card">
+              <div style="font-weight:800;font-size:16px">Bundle Basic • 4 Long-form/mo</div>
+              <div class="price">$100</div>
+              <ul class="price-features">
+                <li>4 long-form videos per month</li>
+                <li>Basic edit & color correction</li>
+              </ul>
+              <a class="buy" href="#contact" data-plan="Bundle Long Basic (4 videos/mo)">Choose Plan</a>
+            </div>
+
+            <div class="price-card featured">
+              <div class="badge">POPULAR</div>
+              <div style="font-weight:800;font-size:16px">Bundle Intermediate • 4 Long-form/mo</div>
+              <div class="price">$175</div>
+              <ul class="price-features">
+                <li>4 long-form videos per month</li>
+                <li>Advanced transitions & grading</li>
+              </ul>
+              <a class="buy" href="#contact" data-plan="Bundle Long Intermediate (4 videos/mo)">Choose Plan</a>
+            </div>
+
+            <div class="price-card">
+              <div style="font-weight:800;font-size:16px">Bundle Advance • 4 Long-form/mo</div>
+              <div class="price">$255</div>
+              <ul class="price-features">
+                <li>4 long-form videos per month</li>
+                <li>Premium motion graphics & sound</li>
+              </ul>
+              <a class="buy" href="#contact" data-plan="Bundle Long Advance (4 videos/mo)">Choose Plan</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- TRAILER -->
+        <div id="trailerPricing" class="pricing-section" data-scope="trailer" style="display:none">
+          <div class="pricing">
+            <div class="price-card">
+              <div style="font-weight:800;font-size:16px">Trailer • Entry Level</div>
+              <div class="price">$750</div>
+              <ul class="price-features">
+                <li>High-impact pacing</li>
+                <li>Title cards & music sync</li>
+              </ul>
+              <a class="buy" href="#contact" data-plan="Trailer Entry">Choose Plan</a>
+            </div>
+
+            <div class="price-card featured">
+              <div class="badge">MOST POPULAR</div>
+              <div style="font-weight:800;font-size:16px">Trailer • Intermediate</div>
+              <div class="price">$1500</div>
+              <ul class="price-features">
+                <li>Advanced motion graphics</li>
+                <li>Sound design & SFX</li>
+              </ul>
+              <a class="buy" href="#contact" data-plan="Trailer Intermediate">Choose Plan</a>
+            </div>
+
+            <div class="price-card">
+              <div style="font-weight:800;font-size:16px">Trailer • Advance</div>
+              <div class="price">$2000</div>
+              <ul class="price-features">
+                <li>Cinematic grade & storytelling</li>
+                <li>Premium graphics & mixing</li>
+              </ul>
+              <a class="buy" href="#contact" data-plan="Trailer Advance">Choose Plan</a>
+            </div>
+          </div>
+        </div>
+
       </section>
 
       <section id="contact">
@@ -347,16 +487,27 @@
             <label for="project">Project Details *</label>
             <textarea id="project" name="project" placeholder="Tell us about your video: type, length, style, deadline, references..." required></textarea>
 
-            <label for="currencySelect">Your Currency</label>
-            <select id="currencySelect" name="currency">
-              <option value="USD" data-region="Abroad" selected>USD $</option>
-              <option value="INR" data-region="India">INR ₹</option>
-              <option value="EUR" data-region="Europe">EUR €</option>
-              <option value="GBP" data-region="UK">GBP £</option>
-              <option value="AED" data-region="UAE">AED د.إ</option>
-              <option value="KWD" data-region="Kuwait">KWD د.ك</option>
-              <option value="USD" data-region="Other">Other</option>
+            <label for="regionSelect">Region</label>
+            <select id="regionSelect" name="region">
+              <option value="" selected disabled>Select a region</option>
+              <option value="Africa">Africa</option>
+              <option value="Asia">Asia</option>
+              <option value="Europe">Europe</option>
+              <option value="North America">North America</option>
+              <option value="South America">South America</option>
+              <option value="Oceania">Oceania</option>
+              <option value="Middle East">Middle East</option>
+              <option value="Other">Other</option>
             </select>
+
+            <label for="countryInput">Country</label>
+            <div class="select country-combo" id="countryCombo">
+              <input id="countryInput" name="country" placeholder="Search and select country" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-expanded="false" aria-haspopup="listbox" />
+              <div class="select-caret" aria-hidden="true">▾</div>
+              <div class="select-panel" id="countryPanel" role="listbox" aria-label="Countries" hidden>
+                <ul id="countryListV" class="select-options"></ul>
+              </div>
+            </div>
 
             <label for="budget">Budget Range (Optional)</label>
             <input id="budget" name="budget" placeholder="e.g. ₹2000 - ₹5000" />

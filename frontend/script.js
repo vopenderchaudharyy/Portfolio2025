@@ -152,7 +152,6 @@
     const rootEl = document.documentElement;
     const themeBtn = document.getElementById('themeToggle');
     const themeBtnMobile = document.getElementById('themeToggleMobile');
-    let systemMql = window.matchMedia ? window.matchMedia('(prefers-color-scheme: light)') : null;
 
     function setButtonLabels(mode){
       const label = `Theme: ${mode[0].toUpperCase()+mode.slice(1)}`;
@@ -161,76 +160,115 @@
     }
 
     function applyThemeMode(mode){
-      // Save mode
-      localStorage.setItem('vv-theme', mode);
-      // Clean previous listener
-      if (systemMql) systemMql.removeEventListener && systemMql.removeEventListener('change', onSystemChange);
-
-      if (mode === 'auto'){
-        const isLight = systemMql ? systemMql.matches : false;
-        if (isLight){
-          rootEl.setAttribute('data-theme','light');
-          currentParticleColors = particleColorsLight;
-        } else {
-          rootEl.removeAttribute('data-theme');
-          currentParticleColors = particleColorsDark;
-        }
-        // Reapply when system changes
-        if (systemMql) systemMql.addEventListener && systemMql.addEventListener('change', onSystemChange);
-      } else if (mode === 'light'){
+      const m = (mode === 'light') ? 'light' : 'dark';
+      localStorage.setItem('vv-theme', m);
+      if (m === 'light'){
         rootEl.setAttribute('data-theme','light');
         currentParticleColors = particleColorsLight;
-      } else { // dark
+      } else {
         rootEl.removeAttribute('data-theme');
         currentParticleColors = particleColorsDark;
       }
-      setButtonLabels(mode);
+      setButtonLabels(m);
     }
 
-    function onSystemChange(){
-      const mode = localStorage.getItem('vv-theme') || 'auto';
-      if (mode === 'auto') applyThemeMode('auto');
-    }
-
-    // Initialize theme (default to auto if none)
+    // Initialize theme (default to dark if none)
     const storedTheme = localStorage.getItem('vv-theme');
-    if (storedTheme){
+    if (storedTheme === 'light' || storedTheme === 'dark'){
       applyThemeMode(storedTheme);
     } else {
-      applyThemeMode('auto');
+      applyThemeMode('dark');
     }
 
-    // Cycle through Light -> Dark -> Auto
+    // Cycle through Light <-> Dark only
     const toggleThemeMode = () => {
-      const mode = localStorage.getItem('vv-theme') || 'auto';
-      const next = mode === 'light' ? 'dark' : (mode === 'dark' ? 'auto' : 'light');
+      const mode = localStorage.getItem('vv-theme') || 'dark';
+      const next = mode === 'light' ? 'dark' : 'light';
       applyThemeMode(next);
     };
     if (themeBtn){ themeBtn.addEventListener('click', toggleThemeMode); }
     if (themeBtnMobile){ themeBtnMobile.addEventListener('click', toggleThemeMode); }
 
-    // Toggle Switch Functionality
+    // Pricing Modes + Toggle (Single / Bundle / Trailer)
+    const modeBtns = {
+      single: document.getElementById('modeSingle'),
+      bundle: document.getElementById('modeBundle'),
+      trailer: document.getElementById('modeTrailer')
+    };
+    const formToggleContainer = document.getElementById('formToggleContainer');
+    const pricingRoot = document.getElementById('pricing');
     const toggleService = document.getElementById('serviceToggle');
-    const videoPricing = document.getElementById('videoPricing');
-    const reelsPricing = document.getElementById('reelsPricing');
-    let isReelsMode = false;
+    const singleLong = document.getElementById('videoPricing');
+    const singleShort = document.getElementById('reelsPricing');
+    const bundleLong = document.getElementById('bundleLongPricing');
+    const bundleShort = document.getElementById('bundleReelsPricing');
+    const trailerSec = document.getElementById('trailerPricing');
+    let pricingMode = 'single'; // 'single' | 'bundle' | 'trailer'
+    let isShortForm = false; // false => Long Form, true => Short Form
+
+    function setActiveModeBtn(){
+      Object.values(modeBtns).forEach(btn => { if(btn){ btn.classList.remove('active'); btn.setAttribute('aria-selected','false'); } });
+      const active = modeBtns[pricingMode];
+      if (active){ active.classList.add('active'); active.setAttribute('aria-selected','true'); }
+    }
+
+    function show(el, on){ if(el){ el.style.display = on ? '' : 'none'; } }
+
+    function updatePricingView(){
+      // Toggle visibility container based on mode
+      if (formToggleContainer){ formToggleContainer.style.display = (pricingMode === 'trailer') ? 'none' : ''; }
+      // Sections
+      const longOn = !isShortForm;
+      // Single
+      show(singleLong, pricingMode === 'single' && longOn);
+      show(singleShort, pricingMode === 'single' && !longOn);
+      // Bundle
+      show(bundleLong, pricingMode === 'bundle' && longOn);
+      show(bundleShort, pricingMode === 'bundle' && !longOn);
+      // Trailer
+      show(trailerSec, pricingMode === 'trailer');
+      // Root class for spacing tweaks
+      if (pricingRoot){ pricingRoot.classList.toggle('trailer-mode', pricingMode === 'trailer'); }
+    }
+
+    // Initialize view
+    setActiveModeBtn();
+    updatePricingView();
+
+    // Toggle click: switch between Long/Short
     if (toggleService){
       toggleService.addEventListener('click', () => {
-        isReelsMode = !isReelsMode;
-        if (isReelsMode){
-          if (videoPricing) videoPricing.style.display = 'none';
-          if (reelsPricing) reelsPricing.style.display = '';
-        } else {
-          if (videoPricing) videoPricing.style.display = '';
-          if (reelsPricing) reelsPricing.style.display = 'none';
-        }
-        toggleService.classList.toggle('active');
+        isShortForm = !isShortForm;
+        toggleService.classList.toggle('active', isShortForm);
+        updatePricingView();
       });
     }
+
+    // Mode buttons handlers
+    if (modeBtns.single){ modeBtns.single.addEventListener('click', () => { pricingMode = 'single'; setActiveModeBtn(); updatePricingView(); clearPlanSelection(); }); }
+    if (modeBtns.bundle){ modeBtns.bundle.addEventListener('click', () => { pricingMode = 'bundle'; setActiveModeBtn(); updatePricingView(); clearPlanSelection(); }); }
+    if (modeBtns.trailer){ modeBtns.trailer.addEventListener('click', () => { pricingMode = 'trailer'; setActiveModeBtn(); updatePricingView(); clearPlanSelection(); }); }
 
     // Plan Selection
     const buyButtons = document.querySelectorAll('.buy');
     const selectedServiceDisplay = document.getElementById('selectedService');
+
+    function currentModeLabel(){
+      if (pricingMode === 'trailer') return 'Trailer';
+      return (pricingMode === 'bundle' ? 'Bundle' : 'Single') + ' • ' + (isShortForm ? 'Short Form' : 'Long Form');
+    }
+
+    function clearPlanSelection(){
+      document.querySelectorAll('.buy.selected').forEach(el => el.classList.remove('selected'));
+      document.querySelectorAll('.price-card.selected').forEach(el => el.classList.remove('selected'));
+      const formEl = document.getElementById('contactForm');
+      if (formEl) formEl.removeAttribute('data-selected-plan');
+      if (selectedServiceDisplay){
+        selectedServiceDisplay.textContent = 'Select a plan to get started';
+        selectedServiceDisplay.style.color = 'var(--accent)';
+        selectedServiceDisplay.style.background = '';
+      }
+    }
     buyButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
         const plan = btn.getAttribute('data-plan');
@@ -251,8 +289,7 @@
           btn.textContent = 'Chosen';
           btn.setAttribute('aria-pressed', 'true');
 
-          const isReelsModeNow = document.getElementById('serviceToggle').classList.contains('active');
-          const serviceTypeNow = isReelsModeNow ? 'Short Form' : 'Long Form';
+          const serviceTypeNow = currentModeLabel();
           const formEl = document.getElementById('contactForm');
           const curCode = formEl ? (formEl.getAttribute('data-currency-code') || 'USD') : 'USD';
           selectedServiceDisplay.textContent = '✓ ' + serviceTypeNow + ': ' + plan + ' - Selected (' + curCode + ')';
@@ -301,8 +338,22 @@
 
   // ✅ Get selected plan and current mode
   const selectedPlan = this.getAttribute('data-selected-plan') || 'No plan selected';
-  const isReelsMode = document.getElementById('serviceToggle').classList.contains('active');
-  const serviceType = isReelsMode ? 'Short Form' : 'Long Form';
+  let serviceType = 'Long Form';
+  try{
+    if (typeof pricingMode !== 'undefined'){
+      if (pricingMode === 'trailer'){
+        serviceType = 'Trailer';
+      } else {
+        const modeLabel = (pricingMode === 'bundle' ? 'Bundle' : 'Single');
+        const formLabel = (typeof isShortForm !== 'undefined' && isShortForm) ? 'Short Form' : 'Long Form';
+        serviceType = modeLabel + ' • ' + formLabel;
+      }
+    } else {
+      // Fallback to toggle-only if variables missing
+      const isReelsMode = document.getElementById('serviceToggle').classList.contains('active');
+      serviceType = isReelsMode ? 'Short Form' : 'Long Form';
+    }
+  }catch(e){ /* keep default */ }
 
   const msg = document.getElementById('formMsg');
   const submitBtn = this.querySelector('button[type="submit"]');
@@ -440,25 +491,88 @@ document.addEventListener('DOMContentLoaded', () => {
     legacyForm.addEventListener('submit', submitContact);
   }
 
-  // Currency handling: update prices and form metadata when user selects a currency
-  (function initCurrency(){
-    const currencySelect = document.getElementById('currencySelect');
+  const ham = document.getElementById('hamburgerBtn');
+  const menu = document.getElementById('mobileMenu');
+  const overlayEl = document.getElementById('mobileOverlay');
+  const closeBtn = document.getElementById('mobileClose');
+  const openMenu = () => { document.body.classList.add('menu-open'); if (ham) ham.setAttribute('aria-expanded','true'); };
+  const closeMenu = () => { document.body.classList.remove('menu-open'); if (ham) ham.setAttribute('aria-expanded','false'); };
+  if (ham) ham.addEventListener('click', () => { if (document.body.classList.contains('menu-open')) closeMenu(); else openMenu(); });
+  if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+  if (overlayEl) overlayEl.addEventListener('click', closeMenu);
+  // Smooth scroll helper with sticky header offset so section titles are visible
+  const getHeaderOffset = () => {
+    const header = document.querySelector('header');
+    const h = header ? header.getBoundingClientRect().height : 0;
+    return Math.max(0, Math.round(h + 8)); // add small margin
+  };
+  const scrollToSection = (id) => {
+    const target = document.getElementById((id || '').replace(/^#/, ''));
+    if (!target) return false;
+    const top = target.getBoundingClientRect().top + window.scrollY - getHeaderOffset();
+    window.scrollTo({ top, behavior: 'smooth' });
+    return true;
+  };
+  // Intercept all in-page links to apply offset scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const href = (a.getAttribute('href') || '').trim();
+      if (!href || href === '#') return; // ignore placeholders
+      const target = document.getElementById(href.replace(/^#/, ''));
+      if (!target) return;
+      e.preventDefault();
+      const mode = (a.getAttribute('data-scroll') || '').toLowerCase();
+      if (mode === 'bottom'){
+        const bottomTop = target.getBoundingClientRect().bottom + window.scrollY - window.innerHeight;
+        window.scrollTo({ top: Math.max(0, bottomTop), behavior: 'smooth' });
+      } else {
+        scrollToSection(href);
+      }
+      if (document.body.classList.contains('menu-open')) closeMenu();
+    });
+  });
+  if (menu) menu.querySelectorAll('[data-nav]').forEach(el => {
+    el.addEventListener('click', () => { closeMenu(); });
+  });
+  if (menu){
+    const stayBtn = menu.querySelector('[data-stay]');
+    if (stayBtn){
+      stayBtn.addEventListener('click', (ev) => { ev.preventDefault(); closeMenu(); });
+    }
+  }
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+  // Adjust initial hash on load (if user opened direct link)
+  if (location.hash){ setTimeout(() => { scrollToSection(location.hash); }, 0); }
+
+  // Region-Country Currency handling with search
+  (function initRegionCountryCurrency(){
     const form = document.getElementById('contactForm');
     if (!form) return;
+    const regionSelect = document.getElementById('regionSelect');
+    const countryInput = document.getElementById('countryInput');
+    const countryPanel = document.getElementById('countryPanel');
+    const countryListV = document.getElementById('countryListV');
     const budgetInput = document.getElementById('budget');
 
-    // Currency meta and fallback rates vs USD
+    // Known currency meta for better formatting; fallback to API symbol
     const currencyMeta = {
       USD: { symbol: '$',  locale: 'en-US', maxFrac: 2 },
       INR: { symbol: '₹',  locale: 'en-IN', maxFrac: 0 },
       EUR: { symbol: '€',  locale: 'de-DE', maxFrac: 2 },
       GBP: { symbol: '£',  locale: 'en-GB', maxFrac: 2 },
       AED: { symbol: 'د.إ', locale: 'ar-AE', maxFrac: 2 },
-      KWD: { symbol: 'د.ك', locale: 'ar-KW', maxFrac: 3 }
+      KWD: { symbol: 'د.ك', locale: 'ar-KW', maxFrac: 3 },
+      JPY: { symbol: '¥', locale: 'ja-JP', maxFrac: 0 },
+      CNY: { symbol: '¥', locale: 'zh-CN', maxFrac: 2 },
+      AUD: { symbol: 'A$', locale: 'en-AU', maxFrac: 2 },
+      CAD: { symbol: 'C$', locale: 'en-CA', maxFrac: 2 }
     };
-    const defaultRates = { USD: 1, INR: 87, EUR: 0.92, GBP: 0.78, AED: 3.67, KWD: 0.31 };
+    // Fallback INR-per-unit values (approx) so we always convert through INR
+    // These are INR for 1 unit of that currency (e.g., 1 USD ≈ 87 INR; 1 EUR ≈ 102 INR)
+    const defaultInrPer = { USD: 87, EUR: 120, GBP: 118, AED: 23.7, KWD: 285, JPY: 0.56, CNY: 12.0, AUD: 55, CAD: 65, INR: 1 };
 
-    const state = { code: 'USD', symbol: '$', locale: 'en-US', maxFrac: 2, rate: 1 };
+    const state = { code: 'USD', symbol: '$', locale: 'en-US', maxFrac: 2, region: '', country: '', inrPer: { ...defaultInrPer } };
+    let countriesCache = []; // [{name, currencyCode, currencySymbol}]
 
     function parseUSD(v){
       const n = Number(String(v).replace(/[^0-9.]/g,'') || '0');
@@ -472,47 +586,203 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('#pricing .price').forEach(el => {
         if (!el.dataset.usd){ el.dataset.usd = String(parseUSD(el.textContent)); }
         const usd = Number(el.dataset.usd || '0');
-        const converted = usd * state.rate;
+        const inrPerUSD = Number(state.inrPer?.USD || defaultInrPer.USD || 87);
+        const priceINR = usd * inrPerUSD;
+        let converted;
+        if (state.code === 'INR'){
+          converted = priceINR;
+        } else {
+          const inrPerTarget = Number(state.inrPer?.[state.code] || defaultInrPer[state.code] || 1);
+          converted = priceINR / (inrPerTarget || 1);
+        }
         el.textContent = state.symbol + fmt(converted);
       });
       if (budgetInput){
-        budgetInput.placeholder = `e.g. ${state.symbol}${fmt(2000)} - ${state.symbol}${fmt(5000)}`;
+        // Build placeholder using local_per_usd derived via INR: local_per_usd = INR_per_USD / INR_per_target
+        const inrPerUSD = Number(state.inrPer?.USD || defaultInrPer.USD || 87);
+        const inrPerTarget = Number(state.inrPer?.[state.code] || defaultInrPer[state.code] || 1);
+        const localPerUSD = state.code === 'INR' ? inrPerUSD : (inrPerUSD / (inrPerTarget || 1));
+        budgetInput.placeholder = `e.g. ${state.symbol}${fmt(2000 * localPerUSD)} - ${state.symbol}${fmt(5000 * localPerUSD)}`;
       }
-      // Expose to form for email backend
+      // Expose to form. For compatibility, set data-currency-rate as local_per_usd
+      const inrPerUSD2 = Number(state.inrPer?.USD || defaultInrPer.USD || 87);
+      const inrPerTarget2 = Number(state.inrPer?.[state.code] || defaultInrPer[state.code] || 1);
+      const localPerUSD2 = state.code === 'INR' ? inrPerUSD2 : (inrPerUSD2 / (inrPerTarget2 || 1));
       form.setAttribute('data-currency-code', state.code);
-      form.setAttribute('data-currency-rate', String(state.rate));
-      if (currencySelect){
-        const opt = currencySelect.options[currencySelect.selectedIndex];
-        const region = opt ? (opt.getAttribute('data-region') || '') : '';
-        form.setAttribute('data-currency-region', region);
-      }
+      form.setAttribute('data-currency-rate', String(localPerUSD2));
+      form.setAttribute('data-currency-region', state.region || '');
+      form.setAttribute('data-country', state.country || '');
     }
-    async function setCurrency(code){
-      const meta = currencyMeta[code] || currencyMeta.USD;
-      state.code = code; state.symbol = meta.symbol; state.locale = meta.locale; state.maxFrac = meta.maxFrac;
-      // use fallback rate immediately
-      state.rate = defaultRates[code] ?? 1;
+    async function setCurrency(code, symbolFromApi){
+      const meta = currencyMeta[code] || { symbol: symbolFromApi || '$', locale: 'en-US', maxFrac: 2 };
+      state.code = code; state.symbol = meta.symbol || symbolFromApi || '$'; state.locale = meta.locale; state.maxFrac = meta.maxFrac;
+      // Lock to fixed INR mappings only (no live API)
+      state.inrPer = { ...defaultInrPer };
       renderPrices();
-      // refine using live rate; ignore errors
-      if (code === 'USD') return;
-      try{
-        const r = await fetch(`https://api.exchangerate.host/latest?base=USD&symbols=${encodeURIComponent(code)}`, { mode: 'cors' });
-        if (r.ok){
-          const d = await r.json();
-          const live = d && d.rates && d.rates[code];
-          if (typeof live === 'number' && Math.abs(live - state.rate) > 1e-6){
-            state.rate = live; renderPrices();
-          }
-        }
-      }catch(e){ /* keep fallback */ }
     }
 
-    if (currencySelect){
-      setCurrency(currencySelect.value);
-      currencySelect.addEventListener('change', () => setCurrency(currencySelect.value));
-    } else {
-      renderPrices();
+    function populateCountries(list){
+      countriesCache = list;
+      if (countryListV){
+        countryListV.innerHTML = '';
+        list.forEach(c => {
+          const li = document.createElement('li');
+          li.setAttribute('role','option');
+          li.dataset.currency = c.currencyCode || 'USD';
+          if (c.currencySymbol) li.dataset.symbol = c.currencySymbol;
+          if (c.cca2) li.dataset.cca2 = c.cca2;
+          li.dataset.name = c.name || '';
+          const cc = (c.cca2 || '').toLowerCase();
+          const flag = cc ? `https://flagcdn.com/w20/${cc}.png` : '';
+          li.innerHTML = flag
+            ? `<span style="display:inline-flex;align-items:center;gap:8px"><img src="${flag}" width="20" height="14" alt="" loading="lazy" decoding="async" style="border-radius:2px;box-shadow:0 0 0 1px rgba(255,255,255,0.15)"/><span>${c.name}</span></span>`
+            : `<span>${c.name}</span>`;
+          li.addEventListener('click', () => {
+            selectCountry(c.name, c.currencyCode, c.currencySymbol, c.cca2);
+          });
+          countryListV.appendChild(li);
+        });
+      }
+      if (countryInput){ countryInput.disabled = list.length === 0; }
     }
+
+    async function loadCountriesForRegion(region){
+      if (!region){ populateCountries([]); return; }
+      let url = '';
+      if (region === 'Other'){
+        url = 'https://restcountries.com/v3.1/all?fields=name,currencies,cca2,region,subregion';
+      } else if (region === 'Middle East'){
+        url = 'https://restcountries.com/v3.1/subregion/Western%20Asia?fields=name,currencies,cca2,region,subregion';
+      } else {
+        url = `https://restcountries.com/v3.1/region/${encodeURIComponent(region)}?fields=name,currencies,cca2,region,subregion`;
+      }
+      try{
+        const r = await fetch(url, { mode: 'cors' });
+        if (!r.ok) throw new Error('fetch failed');
+        const data = await r.json();
+        const list = [];
+        (data || []).forEach(item => {
+          try{
+            const name = item?.name?.common || '';
+            const currencies = item?.currencies || {};
+            const codes = Object.keys(currencies);
+            if (!name || !codes.length) return;
+            const code = codes[0];
+            const symbol = currencies[code]?.symbol || '';
+            const cca2 = item?.cca2 || '';
+            list.push({ name, currencyCode: code, currencySymbol: symbol, cca2 });
+          }catch(e){ /* skip */ }
+        });
+        // sort by name
+        list.sort((a,b)=> a.name.localeCompare(b.name));
+        populateCountries(list);
+      }catch(e){
+        populateCountries([]);
+      }
+    }
+
+    // Helper: show/hide panel
+    let hasLazyLoadedAll = false;
+    async function openCountryPanel(){
+      if (!countryPanel) return;
+      // Lazy-load all countries if no region chosen yet
+      if (!countriesCache.length && !state.region && !hasLazyLoadedAll){
+        hasLazyLoadedAll = true;
+        await loadCountriesForRegion('Other');
+      }
+      countryPanel.hidden = false; countryPanel.classList.add('open');
+      countryInput?.setAttribute('aria-expanded','true');
+    }
+    function closeCountryPanel(){
+      if (!countryPanel) return; countryPanel.hidden = true; countryPanel.classList.remove('open'); countryInput?.setAttribute('aria-expanded','false');
+      // clear active highlight
+      countryListV && countryListV.querySelectorAll('[aria-selected="true"]').forEach(el=>el.removeAttribute('aria-selected'));
+    }
+    function filterCountryPanel(term){
+      const t = (term||'').toLowerCase();
+      if (!countryListV) return;
+      const items = Array.from(countryListV.children);
+      let any = false;
+      items.forEach((li) => {
+        const show = (li.textContent||'').toLowerCase().includes(t);
+        li.hidden = !show;
+        if (show) any = true;
+      });
+      // Simple empty state
+      let empty = countryPanel && countryPanel.querySelector('.empty-state');
+      if (!any){
+        if (!empty){
+          empty = document.createElement('div');
+          empty.className = 'empty-state';
+          empty.style.cssText = 'padding:10px 12px; color:var(--muted); font-size:13px;';
+          empty.textContent = 'No results';
+          countryPanel.appendChild(empty);
+        }
+      } else if (empty){ empty.remove(); }
+    }
+    function selectCountry(name, code, symbol, cca2){
+      if (countryInput) countryInput.value = name;
+      state.country = name;
+      closeCountryPanel();
+      setCurrency(code || 'USD', symbol || '');
+      try{
+        if (countryInput){
+          if (cca2){
+            const u = `https://flagcdn.com/w20/${String(cca2).toLowerCase()}.png`;
+            countryInput.style.backgroundImage = `url(${u})`;
+            countryInput.style.backgroundRepeat = 'no-repeat';
+            countryInput.style.backgroundPosition = '8px center';
+            countryInput.style.backgroundSize = '20px 14px';
+            countryInput.style.paddingLeft = '36px';
+          } else {
+            countryInput.style.backgroundImage = '';
+            countryInput.style.paddingLeft = '';
+          }
+        }
+      }catch(e){ /* ignore */ }
+    }
+
+    // Events
+    if (regionSelect){
+      regionSelect.addEventListener('change', async () => {
+        state.region = regionSelect.value || '';
+        state.country = '';
+        if (countryInput){
+          countryInput.value = '';
+          countryInput.style.backgroundImage = '';
+          countryInput.style.paddingLeft = '';
+        }
+        await loadCountriesForRegion(state.region);
+        // Optional: auto suggest common default for NA
+        closeCountryPanel();
+      });
+    }
+    if (countryInput){
+      countryInput.addEventListener('focus', () => { openCountryPanel(); filterCountryPanel(countryInput.value); });
+      countryInput.addEventListener('click', () => { openCountryPanel(); filterCountryPanel(countryInput.value); });
+      countryInput.addEventListener('input', () => { openCountryPanel(); filterCountryPanel(countryInput.value); });
+      countryInput.addEventListener('keydown', (e) => {
+        if (!countryPanel || countryPanel.hidden) return;
+        const items = Array.from(countryListV?.querySelectorAll('li:not([hidden])') || []);
+        if (!items.length) return;
+        const current = countryListV.querySelector('li[aria-selected="true"]');
+        let idx = current ? items.indexOf(current) : -1;
+        if (e.key === 'ArrowDown'){ e.preventDefault(); idx = Math.min(idx+1, items.length-1); items.forEach(li=>li.removeAttribute('aria-selected')); items[idx].setAttribute('aria-selected','true'); items[idx].scrollIntoView({ block:'nearest' }); }
+        else if (e.key === 'ArrowUp'){ e.preventDefault(); idx = Math.max(idx-1, 0); items.forEach(li=>li.removeAttribute('aria-selected')); items[idx].setAttribute('aria-selected','true'); items[idx].scrollIntoView({ block:'nearest' }); }
+        else if (e.key === 'Enter'){ e.preventDefault(); const pick = current || items[0]; if (pick){ selectCountry(pick.dataset.name || (pick.textContent || ''), pick.dataset.currency, pick.dataset.symbol, pick.dataset.cca2); } }
+        else if (e.key === 'Escape'){ closeCountryPanel(); }
+      });
+    }
+    // Click outside to close
+    document.addEventListener('click', (e) => {
+      if (!countryPanel) return;
+      const combo = document.getElementById('countryCombo');
+      if (!combo) return;
+      if (!combo.contains(e.target)) closeCountryPanel();
+    });
+
+    // Initialize with default USD
+    renderPrices();
   })();
 
   // Generic carousel nav (reels, reviews)
@@ -555,9 +825,8 @@ document.addEventListener('DOMContentLoaded', () => {
   attachCarousel('.reels-carousel', '.reel', '.reels-track', '.reels-nav.prev', '.reels-nav.next');
   attachCarousel('.reviews-carousel', '.review', '.reviews-track', '.reels-nav.prev', '.reels-nav.next');
 
-  // Sanitize YouTube embeds while keeping native playback
-  // Portfolio: use nocookie for maximum privacy
-  document.querySelectorAll('.proj iframe').forEach((ifr) => {
+  const ytIframes = document.querySelectorAll('.proj iframe, .reel iframe');
+  ytIframes.forEach((ifr) => {
     try{
       const u = new URL(ifr.src, window.location.origin);
       if (u.hostname.includes('youtube.com')){
@@ -570,22 +839,48 @@ document.addEventListener('DOMContentLoaded', () => {
       u.searchParams.set('fs','0');
       u.searchParams.set('disablekb','1');
       u.searchParams.set('controls','1');
+      u.searchParams.set('enablejsapi','1');
       u.searchParams.delete('si');
       ifr.src = u.toString();
       if (!ifr.allow) ifr.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
     }catch(e){ /* ignore invalid URL */ }
   });
-  // Reels: keep regular youtube.com for best compatibility (Shorts sometimes block nocookie)
+
+  function subscribeIframe(ifr){
+    const send = () => {
+      try{
+        if (!ifr.contentWindow) return;
+        ifr.contentWindow.postMessage(JSON.stringify({ event: 'listening' }), '*');
+        ifr.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'addEventListener', args: ['onStateChange'] }), '*');
+      }catch(e){ /* ignore */ }
+    };
+    // Attempt immediately and on load
+    send();
+    ifr.addEventListener('load', send);
+  }
+
+  ytIframes.forEach(subscribeIframe);
+
+  window.addEventListener('message', (e) => {
+    let data;
+    try { data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data; } catch { return; }
+    if (!data || data.event !== 'onStateChange') return;
+    if (data.info === 1) {
+      ytIframes.forEach((ifr) => {
+        try{
+          if (ifr.contentWindow && ifr.contentWindow !== e.source){
+            ifr.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+          }
+        }catch(err){ /* ignore */ }
+      });
+    }
+  });
   document.querySelectorAll('.reel iframe').forEach((ifr) => {
     try{
       const u = new URL(ifr.src, window.location.origin);
-      // force standard youtube host for compatibility
       if (u.hostname.includes('youtube-nocookie.com')){
         u.hostname = 'www.youtube.com';
       }
-      // ensure path is /embed/VIDEO_ID (not /shorts)
-      // If already /embed/..., leave it.
-      // Branding/controls
       u.searchParams.set('modestbranding','1');
       u.searchParams.set('rel','0');
       u.searchParams.set('iv_load_policy','3');
@@ -599,7 +894,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }catch(e){ /* ignore invalid URL */ }
   });
 
-  // Thumbnail overlay fallback for reels (ensures a visible preview even if embed is restricted)
   document.querySelectorAll('.reel').forEach((card) => {
     const iframe = card.querySelector('iframe');
     if (!iframe) return;
@@ -609,27 +903,22 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!match) return;
       const vid = match[1];
 
-      // Build overlay with thumbnail background
       const overlay = document.createElement('div');
       overlay.className = 'reel-thumb-overlay';
       overlay.style.cssText = 'position:absolute;inset:0;background:#000 center/cover no-repeat;cursor:pointer;z-index:2;';
       overlay.style.backgroundImage = `url(https://i.ytimg.com/vi/${vid}/hqdefault.jpg)`;
 
-      // Minimal play badge
       const play = document.createElement('div');
       play.style.cssText = 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,0.92);box-shadow:0 8px 24px rgba(0,0,0,0.25);';
-      // triangle
       const tri = document.createElement('div');
       tri.style.cssText = 'position:absolute;left:50%;top:50%;transform:translate(-35%,-50%);width:0;height:0;border-left:18px solid #000;border-top:12px solid transparent;border-bottom:12px solid transparent;';
       play.appendChild(tri);
       overlay.appendChild(play);
 
-      // Hide iframe until user interacts
       iframe.style.visibility = 'hidden';
       card.appendChild(overlay);
 
       overlay.addEventListener('click', () => {
-        // reveal iframe and autoplay
         overlay.remove();
         iframe.style.visibility = '';
         try{
