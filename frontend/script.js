@@ -836,13 +836,13 @@ document.addEventListener('DOMContentLoaded', () => {
       u.searchParams.set('rel','0');
       u.searchParams.set('iv_load_policy','3');
       u.searchParams.set('playsinline','1');
-      u.searchParams.set('fs','0');
+      u.searchParams.set('fs','1');
       u.searchParams.set('disablekb','1');
       u.searchParams.set('controls','1');
       u.searchParams.set('enablejsapi','1');
       u.searchParams.delete('si');
       ifr.src = u.toString();
-      if (!ifr.allow) ifr.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+      if (!ifr.allow) ifr.setAttribute('allow','accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen');
     }catch(e){ /* ignore invalid URL */ }
   });
 
@@ -885,13 +885,21 @@ document.addEventListener('DOMContentLoaded', () => {
       u.searchParams.set('rel','0');
       u.searchParams.set('iv_load_policy','3');
       u.searchParams.set('playsinline','1');
-      u.searchParams.set('fs','0');
+      u.searchParams.set('fs','1');
       u.searchParams.set('disablekb','1');
       u.searchParams.set('controls','1');
       u.searchParams.delete('si');
       ifr.src = u.toString();
-      if (!ifr.allow) ifr.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+      if (!ifr.allow) ifr.setAttribute('allow','accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen');
     }catch(e){ /* ignore invalid URL */ }
+  });
+
+  // Disable top-right in-player share/copy link by intercepting clicks in that area
+  document.querySelectorAll('.proj, .reel').forEach((card) => {
+    const blocker = document.createElement('div');
+    blocker.style.cssText = 'position:absolute;top:0;right:0;width:72px;height:56px;z-index:4;pointer-events:auto;background:transparent;';
+    blocker.setAttribute('aria-hidden','true');
+    card.appendChild(blocker);
   });
 
   document.querySelectorAll('.reel').forEach((card) => {
