@@ -362,10 +362,29 @@
   // Clear any attention animation on submit
   submitBtn.classList.remove('attention');
 
+  // Helper: inline SVG icons for statuses (no emojis)
+  const iconSvg = (kind) => {
+    const common = 'width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" style="vertical-align:-2px;margin-right:6px"';
+    switch(kind){
+      case 'success':
+        return `<svg ${common} fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/><circle cx="12" cy="12" r="10"/></svg>`;
+      case 'warn':
+        return `<svg ${common} fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`;
+      case 'error':
+        return `<svg ${common} fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M15 9 9 15"/><path d="M9 9l6 6"/></svg>`;
+      default: // info
+        return `<svg ${common} fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`;
+    }
+  };
+  const setMsg = (kind, text, color) => {
+    if (!msg) return;
+    msg.innerHTML = `${iconSvg(kind)}${text}`;
+    if (color) msg.style.color = color;
+  };
+
   // Require plan selection before proceeding
   if(!this.getAttribute('data-selected-plan') || (this.getAttribute('data-selected-plan') || '').trim() === '' || (this.getAttribute('data-selected-plan') || '') === 'No plan selected'){
-    msg.textContent = '⚠️ Please select a package before submitting your inquiry.';
-    msg.style.color = '#ff6b6b';
+    setMsg('warn', 'Please select a package before submitting your inquiry.', '#ff6b6b');
     if (selectedServiceDiv){
       selectedServiceDiv.textContent = 'Please select a package first';
       selectedServiceDiv.style.color = '#ff6b6b';
@@ -382,14 +401,12 @@
   }
 
   if(!name || !email || !project){
-    msg.textContent = '❌ Please fill in all required fields.';
-    msg.style.color = '#ff6b6b';
+    setMsg('error', 'Please fill in all required fields.', '#ff6b6b');
     return;
   }
 
   // Loading state
-  msg.textContent = '⏳ Sending your inquiry...';
-  msg.style.color = 'var(--muted)';
+  setMsg('info', 'Sending your inquiry...', 'var(--muted)');
   submitBtn.disabled = true;
   submitBtn.style.opacity = '0.7';
   submitBtn.style.cursor = 'not-allowed';
@@ -419,20 +436,17 @@
     const data = await res.json();
 
     if (data.success) {
-      msg.textContent = '✅ Inquiry sent successfully!';
-      msg.style.color = 'var(--accent)';
+      setMsg('success', 'Inquiry sent successfully!', 'var(--accent)');
       this.reset();
       this.removeAttribute('data-selected-plan');
       document.getElementById('selectedService').textContent = 'Select a plan to get started';
       document.getElementById('selectedService').style.color = 'var(--accent)';
     } else {
-      msg.textContent = '❌ Something went wrong. Please try again.';
-      msg.style.color = '#ff6b6b';
+      setMsg('error', 'Something went wrong. Please try again.', '#ff6b6b');
     }
   } catch (error) {
     console.error(error);
-    msg.textContent = '❌ Server not reachable. Please try again later.';
-    msg.style.color = '#ff6b6b';
+    setMsg('error', 'Server not reachable. Please try again later.', '#ff6b6b');
   } finally {
     // Restore form state
     Array.from(this.elements).forEach(el => el.disabled = false);

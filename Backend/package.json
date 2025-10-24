@@ -1,7 +1,7 @@
 {
   "name": "vopender-visuals-backend",
   "version": "1.0.0",
-  "description": "Backend for Vopender Visuals portfolio website (Node.js + Express + MongoDB + Nodemailer)",
+  "description": "Backend for VPC Studios portfolio website (Node.js + Express + MongoDB + Nodemailer)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -13,7 +13,7 @@
     "mongodb",
     "nodemailer",
     "backend",
-    "vopender-visuals"
+    "vpc-studios"
   ],
   "author": "Vopender Chaudhary",
   "license": "MIT",

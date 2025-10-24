@@ -49,7 +49,7 @@ app.post('/api/contact', async (req, res) => {
 
     // Email to Admin (HTML)
     await transporter.sendMail({
-      from: `"Vopender Visuals Inquiry" <${process.env.EMAIL_USER}>`,
+      from: `"VPC Studios Inquiry" <${process.env.EMAIL_USER}>`,
       to: process.env.ADMIN_EMAIL,
       subject: `New Inquiry from ${name}`,
       html: `
@@ -59,7 +59,7 @@ app.post('/api/contact', async (req, res) => {
               <td style="padding:0 0 16px 0;text-align:center">
                 <div style="display:inline-flex;align-items:center;gap:12px">
                   <div>
-                    <div style="font-weight:800;font-size:16px;color:#ffffff">Vopender Visuals</div>
+                    <div style="font-weight:800;font-size:16px;color:#ffffff">VPC Studios</div>
                     <div style="font-size:12px;color:#808080;letter-spacing:0.5px;text-transform:uppercase">Professional Video Editing</div>
                   </div>
                 </div>
@@ -112,7 +112,7 @@ app.post('/api/contact', async (req, res) => {
               </td>
             </tr>
             <tr>
-              <td style="text-align:center;color:#808080;font-size:12px;padding:16px 0">© Vopender Visuals • Satna, MP</td>
+              <td style="text-align:center;color:#808080;font-size:12px;padding:16px 0">© VPC Studios • Satna, MP</td>
             </tr>
           </table>
         </div>
@@ -121,7 +121,7 @@ app.post('/api/contact', async (req, res) => {
 
     // Confirmation email to user (HTML)
     await transporter.sendMail({
-      from: `"Vopender Visuals" <${process.env.EMAIL_USER}>`,
+      from: `"VPC Studios" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "Thanks! We've received your inquiry",
       html: `
@@ -131,7 +131,7 @@ app.post('/api/contact', async (req, res) => {
               <td style="padding:0 0 16px 0;text-align:center">
                 <div style="display:inline-flex;align-items:center;gap:12px">
                   <div>
-                    <div style="font-weight:800;font-size:16px;color:#ffffff">Vopender Visuals</div>
+                    <div style="font-weight:800;font-size:16px;color:#ffffff">VPC Studios</div>
                     <div style="font-size:12px;color:#808080;letter-spacing:0.5px;text-transform:uppercase">Professional Video Editing</div>
                   </div>
                 </div>
@@ -139,7 +139,7 @@ app.post('/api/contact', async (req, res) => {
             </tr>
             <tr>
               <td style="background:#0a0a0a;border:1px solid rgba(76,187,23,0.25);border-radius:12px;padding:24px">
-                <h1 style="margin:0 0 8px 0;color:#ffffff;font-size:20px">Thanks, ${name}! 🎬</h1>
+                <h1 style="margin:0 0 8px 0;color:#ffffff;font-size:20px">Thanks, ${name}!</h1>
                 <p style="margin:0 0 12px 0;color:#cfd6dd;font-size:14px">We’ve received your inquiry and will get back to you within 24 hours.</p>
 
                 <div style="margin:12px 0 18px 0;padding:12px;background:rgba(76,187,23,0.08);border:1px solid rgba(76,187,23,0.25);border-radius:10px;color:#e6eef6">
@@ -173,7 +173,7 @@ app.post('/api/contact', async (req, res) => {
               </td>
             </tr>
             <tr>
-              <td style="text-align:center;color:#808080;font-size:12px;padding:16px 0">© Vopender Visuals • Satna, MP</td>
+              <td style="text-align:center;color:#808080;font-size:12px;padding:16px 0">© VPC Studios • Satna, MP</td>
             </tr>
           </table>
         </div>
