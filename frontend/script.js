@@ -632,6 +632,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         el.textContent = state.symbol + fmt(converted);
       });
+      // Convert Add-ons amounts as well
+      document.querySelectorAll('#pricing .addons .amount').forEach(el => {
+        if (!el.dataset.usd){ el.dataset.usd = String(parseUSD(el.textContent)); }
+        const usd = Number(el.dataset.usd || '0');
+        const inrPerUSD = Number(state.inrPer?.USD || defaultInrPer.USD || 87);
+        const priceINR = usd * inrPerUSD;
+        let converted;
+        if (state.code === 'INR'){
+          converted = priceINR;
+        } else {
+          const inrPerTarget = Number(state.inrPer?.[state.code] || defaultInrPer[state.code] || 1);
+          converted = priceINR / (inrPerTarget || 1);
+        }
+        el.textContent = state.symbol + fmt(converted);
+      });
       if (budgetInput){
         // Build placeholder using local_per_usd derived via INR: local_per_usd = INR_per_USD / INR_per_target
         const inrPerUSD = Number(state.inrPer?.USD || defaultInrPer.USD || 87);
