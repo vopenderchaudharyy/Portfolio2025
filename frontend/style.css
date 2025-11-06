@@ -553,11 +553,23 @@
     .addons{ margin-top:32px; padding:16px 18px; border-radius:12px; border:1px solid rgba(76,187,23,0.2); background:linear-gradient(180deg, rgba(76,187,23,0.08), rgba(76,187,23,0.03)); box-shadow:0 8px 24px rgba(76,187,23,0.08) }
     .addons-title{ font-weight:800; color:#ffffff; margin-bottom:8px }
     .addons-list{ list-style:none; padding:0; margin:0 }
-    .addons-list li{ display:flex; align-items:center; gap:10px; padding:10px 8px; color:var(--muted); border:1px solid rgba(255,255,255,0.06); border-radius:10px; background:rgba(0,0,0,0.15); margin-top:8px }
+    .addons-list li{ display:grid; grid-template-columns:18px 1fr auto; align-items:start; gap:10px; padding:12px 12px; color:var(--muted); border:1px solid rgba(255,255,255,0.06); border-radius:10px; background:rgba(0,0,0,0.15); margin-top:8px }
     .addons-list li .check{ color:var(--accent); display:inline-flex }
+    .addons-list .addon-text{ display:flex; align-items:center; gap:8px; min-width:0 }
+    .addons-list .addon-label{ color:var(--text); font-weight:600 }
+    .addons-list .addon-suffix{ color:var(--muted) }
+    .addons-list .addon-price{ justify-self:end; align-self:start; white-space:nowrap; font-weight:800; color:var(--text); display:flex; align-items:center; gap:6px; text-align:right }
+    .addons-list .addon-price .addon-suffix{ font-weight:600; color:var(--muted); margin-left:4px }
+    .addons-list .prefix{ margin-right:4px; color:var(--muted) }
+    .addons .amount{ color:var(--text) }
     [data-theme="light"] .addons{ background:#ffffff; border:1px solid rgba(var(--accent-rgb),0.25) }
     [data-theme="light"] .addons-title{ color:#111827 }
     [data-theme="light"] .addons-list li{ background:rgba(0,0,0,0.04); border-color:rgba(var(--accent-rgb),0.2); color:#111827 }
+    @media (max-width:640px){
+      .addons-list .addon-text{ display:block }
+      /* only move the suffix under the label; keep price+suffix inline */
+      .addons-list .addon-text .addon-suffix{ display:block; margin-top:2px }
+    }
 
     /* Ensure trailer options have breathing room below mode buttons */
     #trailerPricing{ margin-top:16px }
