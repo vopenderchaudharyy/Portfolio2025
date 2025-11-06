@@ -193,7 +193,8 @@
     const modeBtns = {
       single: document.getElementById('modeSingle'),
       bundle: document.getElementById('modeBundle'),
-      trailer: document.getElementById('modeTrailer')
+      trailer: document.getElementById('modeTrailer'),
+      graphics: document.getElementById('modeGraphics')
     };
     const formToggleContainer = document.getElementById('formToggleContainer');
     const pricingRoot = document.getElementById('pricing');
@@ -203,6 +204,7 @@
     const bundleLong = document.getElementById('bundleLongPricing');
     const bundleShort = document.getElementById('bundleReelsPricing');
     const trailerSec = document.getElementById('trailerPricing');
+    const graphicsSec = document.getElementById('graphicsPricing');
     let pricingMode = 'single'; // 'single' | 'bundle' | 'trailer'
     let isShortForm = false; // false => Long Form, true => Short Form
 
@@ -216,7 +218,7 @@
 
     function updatePricingView(){
       // Toggle visibility container based on mode
-      if (formToggleContainer){ formToggleContainer.style.display = (pricingMode === 'trailer') ? 'none' : ''; }
+      if (formToggleContainer){ formToggleContainer.style.display = (pricingMode === 'trailer' || pricingMode === 'graphics') ? 'none' : ''; }
       // Sections
       const longOn = !isShortForm;
       // Single
@@ -227,6 +229,8 @@
       show(bundleShort, pricingMode === 'bundle' && !longOn);
       // Trailer
       show(trailerSec, pricingMode === 'trailer');
+      // Graphics
+      show(graphicsSec, pricingMode === 'graphics');
       // Root class for spacing tweaks
       if (pricingRoot){ pricingRoot.classList.toggle('trailer-mode', pricingMode === 'trailer'); }
     }
@@ -248,6 +252,7 @@
     if (modeBtns.single){ modeBtns.single.addEventListener('click', () => { pricingMode = 'single'; setActiveModeBtn(); updatePricingView(); clearPlanSelection(); }); }
     if (modeBtns.bundle){ modeBtns.bundle.addEventListener('click', () => { pricingMode = 'bundle'; setActiveModeBtn(); updatePricingView(); clearPlanSelection(); }); }
     if (modeBtns.trailer){ modeBtns.trailer.addEventListener('click', () => { pricingMode = 'trailer'; setActiveModeBtn(); updatePricingView(); clearPlanSelection(); }); }
+    if (modeBtns.graphics){ modeBtns.graphics.addEventListener('click', () => { pricingMode = 'graphics'; setActiveModeBtn(); updatePricingView(); clearPlanSelection(); }); }
 
     // Plan Selection
     const buyButtons = document.querySelectorAll('.buy');
@@ -255,6 +260,7 @@
 
     function currentModeLabel(){
       if (pricingMode === 'trailer') return 'Trailer';
+      if (pricingMode === 'graphics') return 'Graphics';
       return (pricingMode === 'bundle' ? 'Bundle' : 'Single') + ' • ' + (isShortForm ? 'Short Form' : 'Long Form');
     }
 
