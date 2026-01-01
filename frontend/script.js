@@ -416,23 +416,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (color) msg.style.color = color;
   };
 
-  // Require plan selection before proceeding
-  if(!this.getAttribute('data-selected-plan') || (this.getAttribute('data-selected-plan') || '').trim() === '' || (this.getAttribute('data-selected-plan') || '') === 'No plan selected'){
-    setMsg('warn', 'Please select a package before submitting your inquiry.', '#ff6b6b');
-    if (selectedServiceDiv){
-      selectedServiceDiv.textContent = 'Please select a package first';
-      selectedServiceDiv.style.color = '#ff6b6b';
-      selectedServiceDiv.style.background = 'rgba(255,107,107,0.12)';
-      selectedServiceDiv.style.borderColor = 'rgba(255,107,107,0.35)';
-    }
-
-    const pricingSection = document.getElementById('pricing');
-    if (pricingSection){
-      pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      pricingSection.classList.add('highlight-pulse');
-    }
-    return;
-  }
 
   if(!name || !email || !project){
     setMsg('error', 'Please fill in all required fields.', '#ff6b6b');
