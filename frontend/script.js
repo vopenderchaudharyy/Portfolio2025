@@ -366,28 +366,11 @@ document.addEventListener('DOMContentLoaded', function() {
   const phone = document.getElementById('phone').value.trim();
   const project = document.getElementById('project').value.trim();
   const budget = document.getElementById('budget').value.trim();
-  const currencyCode = this.getAttribute('data-currency-code') || 'USD';
-  const currencyRate = Number(this.getAttribute('data-currency-rate') || '1');
-  const currencyRegion = this.getAttribute('data-currency-region') || '';
-
-  // ✅ Get selected plan and current mode
-  const selectedPlan = this.getAttribute('data-selected-plan') || 'No plan selected';
-  let serviceType = 'Long Form';
-  try{
-    if (typeof pricingMode !== 'undefined'){
-      if (pricingMode === 'trailer'){
-        serviceType = 'Trailer';
-      } else {
-        const modeLabel = (pricingMode === 'bundle' ? 'Bundle' : 'Single');
-        const formLabel = (typeof isShortForm !== 'undefined' && isShortForm) ? 'Short Form' : 'Long Form';
-        serviceType = modeLabel + ' • ' + formLabel;
-      }
-    } else {
-      // Fallback to toggle-only if variables missing
-      const isReelsMode = document.getElementById('serviceToggle').classList.contains('active');
-      serviceType = isReelsMode ? 'Short Form' : 'Long Form';
-    }
-  }catch(e){ /* keep default */ }
+  const serviceType = document.getElementById('serviceType').value;
+  const currencyCode = document.getElementById('currencyCode').value;
+  const currencyRate = 1; // Not used, but kept for backend compatibility
+  const currencyRegion = '';
+  const selectedPlan = 'No plan selected'; // No plan selection in new form
 
   const msg = document.getElementById('formMsg');
   const submitBtn = this.querySelector('button[type="submit"]');
@@ -432,8 +415,8 @@ document.addEventListener('DOMContentLoaded', function() {
   Array.from(this.elements).forEach(el => el.disabled = true);
 
   try {
-    const res = await fetch('https://portfolio2025-lac-delta.vercel.app/api/contact', {
-    // const res = await fetch('http://localhost:5000/api/contact', {
+    // const res = await fetch('https://portfolio2025-lac-delta.vercel.app/api/contact', {
+    const res = await fetch('http://localhost:5000/api/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

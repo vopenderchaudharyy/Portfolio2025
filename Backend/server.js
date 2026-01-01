@@ -50,7 +50,7 @@ app.post('/api/contact', async (req, res) => {
 
     // Email to Admin (HTML)
     await transporter.sendMail({
-      from: `"VPC Studios Inquiry" <${process.env.EMAIL_USER}>`,
+      from: `"Vopender Chaudhary Inquiry" <${process.env.EMAIL_USER}>`,
       to: process.env.ADMIN_EMAIL,
       subject: `New Inquiry from ${name}`,
       html: `
@@ -60,7 +60,7 @@ app.post('/api/contact', async (req, res) => {
               <td style="padding:0 0 16px 0;text-align:center">
                 <div style="display:inline-flex;align-items:center;gap:12px">
                   <div>
-                    <div style="font-weight:800;font-size:16px;color:#ffffff">VPC Studios</div>
+                    <div style="font-weight:800;font-size:16px;color:#ffffff">Vopender Chaudhary</div>
                     <div style="font-size:12px;color:#808080;letter-spacing:0.5px;text-transform:uppercase">Professional Video Editing</div>
                   </div>
                 </div>
@@ -109,7 +109,7 @@ app.post('/api/contact', async (req, res) => {
               </td>
             </tr>
             <tr>
-              <td style="text-align:center;color:#808080;font-size:12px;padding:16px 0">© VPC Studios • Satna, MP</td>
+              <td style="text-align:center;color:#808080;font-size:12px;padding:16px 0">© Vopender Chaudhary • Satna, MP</td>
             </tr>
           </table>
         </div>
@@ -118,7 +118,7 @@ app.post('/api/contact', async (req, res) => {
 
     // Confirmation email to user (HTML)
     await transporter.sendMail({
-      from: `"VPC Studios" <${process.env.EMAIL_USER}>`,
+      from: `"Vopender Chaudhary" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "Thanks! We've received your inquiry",
       html: `
@@ -128,7 +128,7 @@ app.post('/api/contact', async (req, res) => {
               <td style="padding:0 0 16px 0;text-align:center">
                 <div style="display:inline-flex;align-items:center;gap:12px">
                   <div>
-                    <div style="font-weight:800;font-size:16px;color:#ffffff">VPC Studios</div>
+                    <div style="font-weight:800;font-size:16px;color:#ffffff">Vopender Chaudhary</div>
                     <div style="font-size:12px;color:#808080;letter-spacing:0.5px;text-transform:uppercase">Professional Video Editing</div>
                   </div>
                 </div>
@@ -166,7 +166,7 @@ app.post('/api/contact', async (req, res) => {
               </td>
             </tr>
             <tr>
-              <td style="text-align:center;color:#808080;font-size:12px;padding:16px 0">© VPC Studios • Satna, MP</td>
+              <td style="text-align:center;color:#808080;font-size:12px;padding:16px 0">© Vopender Chaudhary • Satna, MP</td>
             </tr>
           </table>
         </div>

@@ -339,6 +339,20 @@
             <label for="phone">Phone (Optional)</label>
             <input id="phone" name="phone" type="tel" />
 
+            <label for="serviceType">Service Type *</label>
+            <select id="serviceType" name="serviceType" required style="margin-bottom:12px">
+              <option value="" disabled selected>Select type</option>
+              <option value="Short Form">Short Form</option>
+              <option value="Long Form">Long Form</option>
+            </select>
+
+            <label for="currencyCode">Currency *</label>
+            <select id="currencyCode" name="currencyCode" required style="margin-bottom:12px">
+              <option value="" disabled selected>Select currency</option>
+              <option value="USD">USD</option>
+              <option value="INR">INR</option>
+            </select>
+
             <label for="project">Project Details *</label>
             <textarea id="project" name="project" placeholder="Tell us about your video: type, length, style, deadline, references..." required></textarea>
 
