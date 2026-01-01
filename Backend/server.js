@@ -1,4 +1,5 @@
 require('dotenv').config();
+console.log('MONGO_URI:', process.env.MONGO_URI);
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -144,10 +145,6 @@ app.post('/api/contact', async (req, res) => {
                     <tr>
                       <td style="padding:6px 0;color:#808080;width:160px">Service Type</td>
                       <td style="padding:6px 0;color:#e6eef6">${serviceType || 'N/A'}</td>
-                    </tr>
-                    <tr>
-                      <td style="padding:6px 0;color:#808080">Selected Plan</td>
-                      <td style="padding:6px 0;color:#e6eef6">${selectedPlan || 'N/A'}</td>
                     </tr>
                     <tr>
                       <td style="padding:6px 0;color:#808080">Budget</td>
