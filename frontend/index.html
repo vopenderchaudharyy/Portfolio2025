@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>VPC Studios – vopenderchaudhary Portfolio</title>
+  <title>Vopender Chaudhary – vopenderchaudhary Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -14,9 +14,9 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <div class="logo">VS</div>
+        <div class="logo">VC</div>
         <div>
-          <div style="font-weight:800;font-size:16px">VPC Studios</div>
+          <div style="font-weight:800;font-size:16px">Vopender Chaudhary</div>
           <div style="font-size:12px;color:var(--muted)">Portfolio & Services</div>
         </div>
       </div>
@@ -27,9 +27,7 @@
         <a href="#top">Home</a>
         <a href="#services">Services</a>
         <a href="#portfolio">Portfolio</a>
-        <a href="#pricing">Pricing</a>
         <a href="#contact" data-scroll="bottom">Contact</a>
-        <button id="themeToggle" class="btn" type="button" style="padding:8px 12px">Light</button>
         <a class="cta" href="https://drive.google.com/file/d/1UPEEzUyW33Jw_fbtZqdJLuKqOcYLO3ix/view?usp=sharing" target="_blank" rel="noopener">Graphic designs</a>
       </nav>
     </header>
@@ -45,10 +43,8 @@
           <a href="#top" data-nav>Home</a>
           <a href="#services" data-nav>Services</a>
           <a href="#portfolio" data-nav>Portfolio</a>
-          <a href="#pricing" data-nav>Pricing</a>
           <a href="#contact" data-nav data-scroll="bottom">Contact</a>
           <a class="cta" href="https://drive.google.com/file/d/1UPEEzUyW33Jw_fbtZqdJLuKqOcYLO3ix/view?usp=sharing" data-nav target="_blank" rel="noopener">Graphic designs</a>
-          <button id="themeToggleMobile" class="btn" type="button">Theme</button>
         </div>
       </div>
     </div>
@@ -325,374 +321,14 @@
         </div>
       </section>
 
-      <section id="pricing">
-        <h2 class="section-title">Pricing & Packages</h2>
-
-        <!-- Mode buttons: Single / Bundle / Trailer -->
-        <div class="pricing-modes" role="tablist" aria-label="Pricing modes">
-          <button class="mode-btn active" id="modeSingle" data-mode="single" role="tab" aria-selected="true">Single Video</button>
-          <button class="mode-btn" id="modeBundle" data-mode="bundle" role="tab" aria-selected="false">Bundle</button>
-          <button class="mode-btn" id="modeTrailer" data-mode="trailer" role="tab" aria-selected="false">Trailer</button>
-          <button class="mode-btn" id="modeGraphics" data-mode="graphics" role="tab" aria-selected="false">Graphics</button>
-        </div>
-
-        <!-- Shared Long/Short toggle (applies to Single and Bundle) -->
-        <div class="toggle-container" id="formToggleContainer">
-          <span class="toggle-label">Long Form</span>
-          <div class="toggle-switch" id="serviceToggle" aria-label="Toggle Long/Short"></div>
-          <span class="toggle-label">Short Form</span>
-        </div>
-
-        <!-- SINGLE: reuse existing Long (Video) and Short (Reels) pricing -->
-        <div id="videoPricing" class="pricing-section" data-scope="single">
-          <div class="pricing">
-            <div class="price-card">
-              <div style="font-weight:800;font-size:16px">Basic Video</div>
-              <div class="price">$75</div>
-              <div class="offer" style="margin:6px 0 0;color:var(--accent)"><strong>Launch Offer:</strong> <span class="amount" data-usd="52">$52</span> <span style="font-size:12px;color:var(--muted)">(30% OFF)</span></div>
-              <ul class="price-features">
-                <li>Up to 1 min video</li>
-                <li>Basic cuts & transitions</li>
-                <li>Music sync & overlays</li>
-                <li>Unlimited Revisions</li>
-                <li>24hr turnaround</li>
-              </ul>
-              <a class="buy" href="#contact" data-plan="Basic Video">Choose Plan</a>
-            </div>
-
-            <div class="price-card featured">
-              <div class="badge">MOST POPULAR</div>
-              <div style="font-weight:800;font-size:16px">Intermediate Video</div>
-              <div class="price">$150</div>
-              <div class="offer" style="margin:6px 0 0;color:var(--accent)"><strong>Launch Offer:</strong> <span class="amount" data-usd="105">$105</span> <span style="font-size:12px;color:var(--muted)">(30% OFF)</span></div>
-              <ul class="price-features">
-                <li>Up to 1 min video</li>
-                <li>Advanced transitions</li>
-                <li>Color grading included</li>
-                <li>Motion graphics & effects</li>
-                <li>Unlimited Revisions</li>
-                <li>48-72hr turnaround</li>
-              </ul>
-              <a class="buy" href="#contact" data-plan="Intermediate Video">Choose Plan</a>
-            </div>
-
-            <div class="price-card">
-              <div style="font-weight:800;font-size:16px">Advance Video</div>
-              <div class="price">$225</div>
-              <div class="offer" style="margin:6px 0 0;color:var(--accent)"><strong>Launch Offer:</strong> <span class="amount" data-usd="157">$157</span> <span style="font-size:12px;color:var(--muted)">(30% OFF)</span></div>
-              <ul class="price-features">
-                <li>1 min video</li>
-                <li>Full cinematic grade</li>
-                <li>Professional sound design</li>
-                <li>Motion graphics</li>
-                <li>Unlimited Revisions</li>
-                <li>72-96hr turnaround</li>
-              </ul>
-              <a class="buy" href="#contact" data-plan="Cinematic Video">Choose Plan</a>
-            </div>
-          </div>
-        </div>
-
-        <div id="reelsPricing" class="pricing-section" data-scope="single" style="display:none">
-          <div class="pricing">
-            <div class="price-card">
-              <div style="font-weight:800;font-size:16px">Basic Reels</div>
-              <div class="price">$40</div>
-              <div class="offer" style="margin:6px 0 0;color:var(--accent)"><strong>Launch Offer:</strong> <span class="amount" data-usd="28">$28</span> <span style="font-size:12px;color:var(--muted)">(30% OFF)</span></div>
-              <ul class="price-features">
-                <li>Up to 15 sec reel</li>
-                <li>Basic transitions</li>
-                <li>Music Sync</li>
-                <li>Caption/text overlay</li>
-                <li>24hr turnaround</li>
-                <li>Unlimited revision rounds</li>
-              </ul>
-              <a class="buy" href="#contact" data-plan="Basic Reels">Choose Plan</a>
-            </div>
-
-            <div class="price-card featured">
-              <div class="badge">MOST POPULAR</div>
-              <div style="font-weight:800;font-size:16px">Intermediate Reels</div>
-              <div class="price">$75</div>
-              <div class="offer" style="margin:6px 0 0;color:var(--accent)"><strong>Launch Offer:</strong> <span class="amount" data-usd="52">$52</span> <span style="font-size:12px;color:var(--muted)">(30% OFF)</span></div>
-              <ul class="price-features">
-                <li>Up to 30 sec reel</li>
-                <li>Advanced transitions</li>
-                <li>Color grading</li>
-                <li>Motion graphics</li>
-                 <li>24-48hr turnaround</li>
-                <li>Unlimited revision rounds</li>
-              </ul>
-              <a class="buy" href="#contact" data-plan="Intermediate Reels">Choose Plan</a>
-            </div>
-
-            <div class="price-card">
-              <div style="font-weight:800;font-size:16px">Advanced Reels</div>
-              <div class="price">$125</div>
-              <div class="offer" style="margin:6px 0 0;color:var(--accent)"><strong>Launch Offer:</strong> <span class="amount" data-usd="87">$87</span> <span style="font-size:12px;color:var(--muted)">(30% OFF)</span></div>
-              <ul class="price-features">
-                <li>Up to 60 sec reel</li>
-                <li>Premium color grade</li>
-                <li>Motion Graphics</li>
-                <li>Advanced effects</li>
-                <li>Sound design</li>
-                 <li>48-72hr turnaround</li>
-                <li>Unlimited revision rounds</li>
-              </ul>
-              <a class="buy" href="#contact" data-plan="Advanced Reels">Choose Plan</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- BUNDLE: Short Form (Reels) -->
-        <div id="bundleReelsPricing" class="pricing-section" data-scope="bundle" style="display:none">
-          <div class="pricing">
-            <div class="price-card">
-              <div style="font-weight:800;font-size:16px">Basic</div>
-              <div class="price">$800</div>
-              <div class="offer" style="margin:6px 0 0;color:var(--accent)"><strong>Launch Offer:</strong> <span class="amount" data-usd="560">$560</span> <span style="font-size:12px;color:var(--muted)">(30% OFF)</span></div>
-              <ul class="price-features">
-                <li>20 short-form videos per month</li>
-                <li>Focus: Maximize volume and consistency (Vlogs, simple testimonials)</li>
-                <li>Transitions: Basic cuts (L-cuts, J-cuts), simple fade/dissolve</li>
-                <li>Captions/Text: Simple static captions (single font/color)</li>
-                <li>Graphics: Basic text overlays (as needed)</li>
-                <li>Color: Basic correction (exposure & white balance)</li>
-                <li>Sound: Background music sync, volume normalization</li>
-                <li>Revisions: 5 rounds</li>
-              </ul>
-              <a class="buy" href="#contact" data-plan="Bundle Reels Basic (20 videos)">Choose Plan</a>
-            </div>
-
-            <div class="price-card featured">
-              <div class="badge">MOST POPULAR</div>
-              <div style="font-weight:800;font-size:16px">Intermediate</div>
-              <div class="price">$1500</div>
-              <div class="offer" style="margin:6px 0 0;color:var(--accent)"><strong>Launch Offer:</strong> <span class="amount" data-usd="1050">$1050</span> <span style="font-size:12px;color:var(--muted)">(30% OFF)</span></div>
-              <ul class="price-features">
-                <li>20 short-form videos per month</li>
-                <li>Focus: Drive engagement and brand identity (Marketing, Creator content)</li>
-                <li>Transitions: Advanced/Trending (Whips, Zooms, seamless flow)</li>
-                <li>Captions/Text: Professional subtitles (branded fonts, highlight colors, kinetic pops)</li>
-                <li>Graphics: Motion graphics (lower-thirds, brand logos, intro/outro)</li>
-                <li>Color: Consistent color grading (uniform brand look/LUT across all 20 videos)</li>
-                <li>Sound: Advanced audio sweetening (noise/hiss reduction, dynamic range compression)</li>
-                <li>Revisions: 8 rounds</li>
-              </ul>
-              <a class="buy" href="#contact" data-plan="Bundle Reels Intermediate (20 videos)">Choose Plan</a>
-            </div>
-
-            <div class="price-card">
-              <div style="font-weight:800;font-size:16px">Advance</div>
-              <div class="price">$2250</div>
-              <div class="offer" style="margin:6px 0 0;color:var(--accent)"><strong>Launch Offer:</strong> <span class="amount" data-usd="1575">$1575</span> <span style="font-size:12px;color:var(--muted)">(30% OFF)</span></div>
-              <ul class="price-features">
-                <li>20 short-form videos per month</li>
-                <li>Focus: Viral potential & cinematic quality (High-end brands, ads)</li>
-                <li>Transitions: Premium, dynamic (Masking, custom wipes, glitch effects)</li>
-                <li>Captions/Text: Custom animated captions (animated boxes, unique motion typography)</li>
-                <li>Graphics: Complex motion graphics (custom graphics, data viz, unique SFX)</li>
-                <li>Color: Premium cinematic grade (advanced color science, film emulation, high visual impact)</li>
-                <li>Sound: Full sound design (layered ambience, custom SFX tailored to visuals)</li>
-                <li>Revisions: Unlimited</li>
-              </ul>
-              <a class="buy" href="#contact" data-plan="Bundle Reels Advance (20 videos)">Choose Plan</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- BUNDLE: Long Form (4 videos per month) -->
-        <div id="bundleLongPricing" class="pricing-section" data-scope="bundle" style="display:none">
-          <div class="pricing">
-            <div class="price-card">
-              <div style="font-weight:800;font-size:16px">Basic</div>
-              <div class="price">$600</div>
-              <div class="offer" style="margin:6px 0 0;color:var(--accent)"><strong>Launch Offer:</strong> <span class="amount" data-usd="420">$420</span> <span style="font-size:12px;color:var(--muted)">(30% OFF)</span></div>
-              <ul class="price-features">
-                <li>4 videos per month (up to 10 min each)</li>
-                <li>Basic cuts, sequencing, jump cuts, minor clean-up</li>
-                <li>Simple text overlays, basic titles</li>
-                <li>Basic color correction (exposure/white balance only)</li>
-                <li>Background music sync, basic audio leveling</li>
-                <li>5 rounds of revisions</li>
-              </ul>
-              <a class="buy" href="#contact" data-plan="Bundle Long Basic (4 videos/mo)">Choose Plan</a>
-            </div>
-
-            <div class="price-card featured">
-              <div class="badge">MOST POPULAR</div>
-              <div style="font-weight:800;font-size:16px">Intermediate</div>
-              <div class="price">$1200</div>
-              <div class="offer" style="margin:6px 0 0;color:var(--accent)"><strong>Launch Offer:</strong> <span class="amount" data-usd="840">$840</span> <span style="font-size:12px;color:var(--muted)">(30% OFF)</span></div>
-              <ul class="price-features">
-                <li>4 videos per month (up to 10 min each)</li>
-                <li>Advanced pacing & flow, Green Screen/Chroma Key integration</li>
-                <li>Subtle motion graphics, professional lower-thirds, branded intro/outro</li>
-                <li>Professional color grading (consistent brand look)</li>
-                <li>Professional audio sweetening (noise reduction, dynamic range compression)</li>
-                <li>8 rounds of revisions</li>
-              </ul>
-              <a class="buy" href="#contact" data-plan="Bundle Long Intermediate (4 videos/mo)">Choose Plan</a>
-            </div>
-
-            <div class="price-card">
-              <div style="font-weight:800;font-size:16px">Advance</div>
-              <div class="price">$1800</div>
-              <div class="offer" style="margin:6px 0 0;color:var(--accent)"><strong>Launch Offer:</strong> <span class="amount" data-usd="1260">$1260</span> <span style="font-size:12px;color:var(--muted)">(30% OFF)</span></div>
-              <ul class="price-features">
-                <li>4 videos per month (up to 10 min each)</li>
-                <li>Full creative direction, multicam syncing (up to 3 tracks)</li>
-                <li>Custom/complex motion graphics, kinetic typography, logo animation</li>
-                <li>Full cinematic color grade (advanced LUTs, film aesthetic matching)</li>
-                <li>Full sound design (SFX, layered audio, final mix/mastering)</li>
-                <li>Unlimited revisions</li>
-              </ul>
-              <a class="buy" href="#contact" data-plan="Bundle Long Advance (4 videos/mo)">Choose Plan</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- TRAILER -->
-        <div id="trailerPricing" class="pricing-section" data-scope="trailer" style="display:none">
-          <div class="pricing">
-            <div class="price-card">
-              <div style="font-weight:800;font-size:16px">Trailer • Entry Level</div>
-              <div class="price">$1500</div>
-              <div class="offer" style="margin:6px 0 0;color:var(--accent)"><strong>Launch Offer:</strong> <span class="amount" data-usd="1050">$1050</span> <span style="font-size:12px;color:var(--muted)">(30% OFF)</span></div>
-              <ul class="price-features">
-                <li>Pacing/Rhythm: High-impact pacing (clean music-beat sync to key moments)</li>
-                <li>Title Cards: Simple, static titles with clean, standard font</li>
-                <li>Visual Polish: Standard color correction (exposure and tone only)</li>
-                <li>Sound: Music synchronization and basic volume leveling</li>
-                <li>Storytelling: Emphasis on showcasing best moments</li>
-                <li>Revisions: 5 rounds</li>
-              </ul>
-              <a class="buy" href="#contact" data-plan="Trailer Entry">Choose Plan</a>
-            </div>
-
-            <div class="price-card featured">
-              <div class="badge">MOST POPULAR</div>
-              <div style="font-weight:800;font-size:16px">Trailer • Intermediate</div>
-              <div class="price">$2500</div>
-              <div class="offer" style="margin:6px 0 0;color:var(--accent)"><strong>Launch Offer:</strong> <span class="amount" data-usd="1750">$1750</span> <span style="font-size:12px;color:var(--muted)">(30% OFF)</span></div>
-              <ul class="price-features">
-                <li>Pacing/Rhythm: Advanced beat mapping (precise sync, rhythm shifts, varied pacing)</li>
-                <li>Title Cards: Advanced motion graphics (custom animated text, branded lower-thirds)</li>
-                <li>Visual Polish: Basic color grading (consistent LUT/look for aesthetic)</li>
-                <li>Sound: Sound design & SFX (environmental whooshes, hits at key moments)</li>
-                <li>Storytelling: Emphasis on narrative flow and clear emotional connection</li>
-                <li>Revisions: 8 rounds</li>
-              </ul>
-              <a class="buy" href="#contact" data-plan="Trailer Intermediate">Choose Plan</a>
-            </div>
-
-            <div class="price-card">
-              <div style="font-weight:800;font-size:16px">Trailer • Advance</div>
-              <div class="price">$4000</div>
-              <div class="offer" style="margin:6px 0 0;color:var(--accent)"><strong>Launch Offer:</strong> <span class="amount" data-usd="2800">$2800</span> <span style="font-size:12px;color:var(--muted)">(30% OFF)</span></div>
-              <ul class="price-features">
-                <li>Pacing/Rhythm: Custom pacing & tension arc (expert control: build-up, release, title reveal)</li>
-                <li>Title Cards: Cinematic title integration (text interacts with footage; high-end effects)</li>
-                <li>Visual Polish: Full cinematic color grade (advanced color science, scene-matching, film emulation)</li>
-                <li>Sound: Premium mixing & mastering (layered dialog/music/SFX to theatrical loudness)</li>
-                <li>Storytelling: Emphasis on tension, mystery, and climax for maximum hype</li>
-                <li>Revisions: Unlimited</li>
-              </ul>
-              <a class="buy" href="#contact" data-plan="Trailer Advance">Choose Plan</a>
-            </div>
-          </div>
-        </div>
-        
-        <div id="graphicsPricing" class="pricing-section" data-scope="graphics" style="display:none">
-          <h3 class="section-subtitle">Graphic Designing Services & Pricing</h3>
-          <div class="pricing">
-            <div class="price-card">
-              <div style="font-weight:800;font-size:16px">Basic Plan</div>
-              <div class="price" data-usd="30">$30</div>
-              <div class="offer" style="margin:6px 0 0;color:var(--accent)"><strong>Launch Offer:</strong> <span class="amount" data-usd="20">$20</span> <span style="font-size:12px;color:var(--muted)">(33% OFF)</span></div>
-              <ul class="price-features">
-                <li>1 Design (Poster / Thumbnail / Banner)</li>
-                <li>1 Revision</li>
-                <li>Standard delivery (2 days)</li>
-                <li>File format: JPG / PNG</li>
-                <li>Best for: Small creators or single promotions</li>
-              </ul>
-              <a class="buy" href="#contact" data-plan="Graphics • Basic">Choose Plan</a>
-            </div>
-
-            <div class="price-card featured">
-              <div class="badge">MOST POPULAR</div>
-              <div style="font-weight:800;font-size:16px">Standard Plan</div>
-              <div class="price" data-usd="90">$90</div>
-              <div class="offer" style="margin:6px 0 0;color:var(--accent)"><strong>Launch Offer:</strong> <span class="amount" data-usd="70">$70</span> <span style="font-size:12px;color:var(--muted)">(22% OFF)</span></div>
-              <ul class="price-features">
-                <li>Up to 3 Designs (Posters, Thumbnails, or Carousels)</li>
-                <li>2 Revisions</li>
-                <li>Enhanced color grading & layout</li>
-                <li>Delivery in 2–3 days</li>
-                <li>File format: JPG / PNG + editable (on request)</li>
-                <li>Best for: YouTubers, influencers, and businesses needing regular posts</li>
-              </ul>
-              <a class="buy" href="#contact" data-plan="Graphics • Standard">Choose Plan</a>
-            </div>
-
-            <div class="price-card">
-              <div style="font-weight:800;font-size:16px">Premium Plan</div>
-              <div class="price" data-usd="200">$200</div>
-              <div class="offer" style="margin:6px 0 0;color:var(--accent)"><strong>Launch Offer:</strong> <span class="amount" data-usd="150">$150</span> <span style="font-size:12px;color:var(--muted)">(25% OFF)</span></div>
-              <ul class="price-features">
-                <li>5–8 Creative Designs (mix of Posters, Carousels, and Social Media Posts)</li>
-                <li>Concept ideation + color consistency across all posts</li>
-                <li>3+ Revisions</li>
-                <li>Priority delivery (3-4 days)</li>
-                <li>Source file</li>
-                <li>Best for: Brands or agencies seeking a consistent visual identity</li>
-              </ul>
-              <a class="buy" href="#contact" data-plan="Graphics • Premium">Choose Plan</a>
-            </div>
-          </div>
-          <div class="addons" aria-label="Add-ons (Optional)">
-            <div class="addons-title">Add-ons (Optional)</div>
-            <ul class="addons-list">
-              <li>
-                <span class="check" aria-hidden="true">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/><circle cx="12" cy="12" r="10"/></svg>
-                </span>
-                <span class="addon-text">
-                  <span class="addon-label">Extra Revision:</span>
-                </span>
-                <span class="addon-price"><span class="amount" data-usd="5">$5</span><span class="addon-suffix">per design</span></span>
-              </li>
-              <li>
-                <span class="check" aria-hidden="true">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/><circle cx="12" cy="12" r="10"/></svg>
-                </span>
-                <span class="addon-text">
-                  <span class="addon-label">Source File (if not included):</span>
-                </span>
-                <span class="addon-price"><span class="amount" data-usd="5">$5</span><span class="addon-suffix">per design</span></span>
-              </li>
-              <li>
-                <span class="check" aria-hidden="true">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/><circle cx="12" cy="12" r="10"/></svg>
-                </span>
-                <span class="addon-text">
-                  <span class="addon-label">Urgent Delivery (within 24 hrs):</span>
-                </span>
-                <span class="addon-price"><span class="prefix">+</span><span class="amount" data-usd="10">$10</span></span>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-      </section>
+      <!-- Pricing & Packages section removed -->
 
       <section id="contact">
         <h2 class="section-title">Let's Create Something Amazing</h2>
         <p class="lead">Tell us about your project—timeline, style, and vision. We'll respond with a personalized quote within 24 hours.</p>
         <div class="contact-grid">
           <form id="contactForm">
-            <div class="service-display" id="selectedService">Select a plan to get started</div>
+            <div class="service-display" id="selectedService">One step away — complete the form below to get started</div>
 
             <label for="name">Full Name *</label>
             <input id="name" name="name" required />
@@ -706,27 +342,7 @@
             <label for="project">Project Details *</label>
             <textarea id="project" name="project" placeholder="Tell us about your video: type, length, style, deadline, references..." required></textarea>
 
-            <label for="regionSelect">Region</label>
-            <select id="regionSelect" name="region">
-              <option value="" selected disabled>Select a region</option>
-              <option value="Africa">Africa</option>
-              <option value="Asia">Asia</option>
-              <option value="Europe">Europe</option>
-              <option value="North America">North America</option>
-              <option value="South America">South America</option>
-              <option value="Oceania">Oceania</option>
-              <option value="Middle East">Middle East</option>
-              <option value="Other">Other</option>
-            </select>
 
-            <label for="countryInput">Country</label>
-            <div class="select country-combo" id="countryCombo">
-              <input id="countryInput" name="country" placeholder="Search and select country" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-expanded="false" aria-haspopup="listbox" />
-              <div class="select-caret" aria-hidden="true">▾</div>
-              <div class="select-panel" id="countryPanel" role="listbox" aria-label="Countries" hidden>
-                <ul id="countryListV" class="select-options"></ul>
-              </div>
-            </div>
 
             <label for="budget">Budget Range (Optional)</label>
             <input id="budget" name="budget" placeholder="e.g. ₹2000 - ₹5000" />
@@ -779,8 +395,8 @@
     </main>
 
     <footer>
-      <div style="margin-bottom:16px">© <strong>VPC Studios</strong> — Professional Video Editing & Production </div>
-      <div style="font-size:12px;color:#666">Based in Satna, Madhya Pradesh • Serving clients worldwide</div>
+      <div style="margin-bottom:16px">© <strong>Vopender Chaudhary</strong> — Professional Video Editing </div>
+      <div style="font-size:12px;color:#666">Based in India • Serving clients worldwide</div>
     </footer>
   </div>
   <!-- Floating Back to Top button at bottom-right -->

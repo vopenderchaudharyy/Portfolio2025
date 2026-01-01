@@ -30,7 +30,7 @@ const transporter = nodemailer.createTransport({
 // ✅ POST route for form submission
 app.post('/api/contact', async (req, res) => {
   try {
-    const { name, email, phone, project, budget, selectedPlan, serviceType, currencyCode, currencyRate, currencyRegion } = req.body;
+    const { name, email, phone, project, budget, selectedPlan, serviceType, currencyCode, currencyRate } = req.body;
 
     // helpers for formatting
     const symbols = { USD: '$', INR: '₹', EUR: '€', GBP: '£', AED: 'د.إ', KWD: 'د.ك' };
@@ -44,7 +44,7 @@ app.post('/api/contact', async (req, res) => {
     const budgetDisplay = budget ? `${sym}${fmt(budget)}` : 'N/A';
 
     // Save in MongoDB
-    const inquiry = new Inquiry({ name, email, phone, project, budget, selectedPlan, serviceType, currencyCode, currencyRate, currencyRegion });
+    const inquiry = new Inquiry({ name, email, phone, project, budget, selectedPlan, serviceType, currencyCode, currencyRate });
     await inquiry.save();
 
     // Email to Admin (HTML)
@@ -88,8 +88,8 @@ app.post('/api/contact', async (req, res) => {
                     <td style="padding:8px 0;color:#e6eef6">${serviceType || 'N/A'}</td>
                   </tr>
                   <tr>
-                    <td style="padding:8px 0;color:#4CBB17;font-weight:700">Region / Currency</td>
-                    <td style="padding:8px 0;color:#e6eef6">${currencyRegion || 'N/A'} (${currencyCode || 'USD'})</td>
+                    <td style="padding:8px 0;color:#4CBB17;font-weight:700">Currency</td>
+                    <td style="padding:8px 0;color:#e6eef6">${currencyCode || 'USD'}</td>
                   </tr>
                   <tr>
                     <td style="padding:8px 0;color:#4CBB17;font-weight:700">Selected Plan</td>

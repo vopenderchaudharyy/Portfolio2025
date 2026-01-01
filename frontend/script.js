@@ -1,3 +1,31 @@
+// Custom scroll for #contact to avoid scrolling past footer
+document.addEventListener('DOMContentLoaded', function() {
+  function scrollToContactSection(e) {
+    const href = this.getAttribute('href');
+    if (href === '#contact') {
+      e.preventDefault();
+      const contact = document.getElementById('contact');
+      const footer = document.querySelector('footer');
+      if (contact && footer) {
+        const contactRect = contact.getBoundingClientRect();
+        const footerRect = footer.getBoundingClientRect();
+        const scrollY = window.scrollY || window.pageYOffset;
+        const contactTop = contactRect.top + scrollY;
+        const footerTop = footerRect.top + scrollY;
+        const windowHeight = window.innerHeight;
+        // If scrolling to contact would push footer above the viewport, adjust
+        let targetScroll = contactTop;
+        if (contactTop + windowHeight > footerTop) {
+          targetScroll = Math.max(footerTop - windowHeight + 40, contactTop); // 40px padding
+        }
+        window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+      }
+    }
+  }
+  document.querySelectorAll('a[href="#contact"]').forEach(a => {
+    a.addEventListener('click', scrollToContactSection);
+  });
+});
 // Scroll Progress Bar
     const scrollProgress = document.createElement('div');
     scrollProgress.className = 'scroll-progress';
@@ -421,8 +449,8 @@
   Array.from(this.elements).forEach(el => el.disabled = true);
 
   try {
-    const res = await fetch('https://portfolio2025-lac-delta.vercel.app/api/contact', {
-    // const res = await fetch('http://localhost:5000/api/contact', {
+    // const res = await fetch('https://portfolio2025-lac-delta.vercel.app/api/contact', {
+    const res = await fetch('http://localhost:5000/api/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

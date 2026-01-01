@@ -10,7 +10,6 @@ const inquirySchema = new mongoose.Schema({
   serviceType: String, // ✅ added new field
   currencyCode: String,
   currencyRate: Number,
-  currencyRegion: String,
   createdAt: { type: Date, default: Date.now }
 });
 

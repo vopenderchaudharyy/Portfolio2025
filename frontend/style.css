@@ -63,13 +63,14 @@
 
     /* Light theme overrides (Classic Minimal palette) */
     [data-theme="light"]{
-      --bg:#EFEEEA; 
-      --card:#FFFFFF; 
-      --text:#000000; 
-      --muted:#273F4F; 
-      --accent:#FE7743; 
-      --accent-rgb:254,119,67; 
-      --glass: rgba(254,119,67,0.06);
+      --bg:#AFDDE5;
+      --card:#FFFFFF;
+      --text:rgba(0,49,53,0.8);
+      --muted:rgba(2,73,80,0.8);
+      --accent:rgba(15,170,175,0.8);
+      --accent-rgb:15,170,175;
+      --highlight:#964734;
+      --glass: rgba(15,170,175,0.06);
     }
     [data-theme="light"] body{
       background:linear-gradient(180deg,#EFEEEA 0%, #FFFFFF 100%);
@@ -97,14 +98,14 @@
     /* Pricing/Toggle text to black */
     [data-theme="light"] .toggle-label{ color:#000000 }
     [data-theme="light"] .pricing .price-card > div[style*="font-weight:800"]{ color:#000000 }
-    /* Black buttons in light mode */
-    [data-theme="light"] .btn.primary{ background:#000000; color:#ffffff; box-shadow:none }
-    [data-theme="light"] .cta{ background:#000000; color:#ffffff; box-shadow:none }
-    [data-theme="light"] .buy{ background:#000000; color:#ffffff; box-shadow:none }
-    [data-theme="light"] .buy:hover{ box-shadow:0 10px 20px rgba(0,0,0,0.25) }
-    [data-theme="light"] .buy.selected{ background:#000000; color:#ffffff; box-shadow:0 10px 20px rgba(0,0,0,0.25) }
-    /* Pricing badge to black */
-    [data-theme="light"] .badge{ background:#000000; color:#ffffff }
+    /* Themed buttons in light mode */
+    [data-theme="light"] .btn.primary{ background:#0FAAAF; color:#003135; box-shadow:none }
+    [data-theme="light"] .cta{ background:#0FAAAF; color:#003135; box-shadow:none }
+    [data-theme="light"] .buy{ background:#0FAAAF; color:#003135; box-shadow:none }
+    [data-theme="light"] .buy:hover{ box-shadow:0 10px 20px rgba(15,170,175,0.25) }
+    [data-theme="light"] .buy.selected{ background:#0FAAAF; color:#003135; box-shadow:0 10px 20px rgba(15,170,175,0.25) }
+    /* Pricing badge to highlight color */
+    [data-theme="light"] .badge{ background:#964734; color:#ffffff }
     /* Services hover text visibility */
     [data-theme="light"] .service p{ color:#273F4F }
     [data-theme="light"] .service:hover p{ color:#000000 }
@@ -1259,14 +1260,14 @@
       display:block;
       font-size:14px;
       color:var(--accent);
-      margin-bottom:8px;
+      margin-bottom:0px;
       font-weight:600;
       transition:color 0.3s ease;
     }
     
     input, textarea, select{
       width:100%;
-      padding:12px;
+      padding:5px;
       border-radius:8px;
       border:1px solid rgba(76,187,23,0.2);
       background:rgba(0,0,0,0.3);
