@@ -6,8 +6,7 @@ const inquirySchema = new mongoose.Schema({
   phone: String,
   project: { type: String, required: true },
   budget: String,
-  selectedPlan: String,
-  serviceType: String, // ✅ added new field
+  serviceType: String,
   currencyCode: String,
   currencyRate: Number,
   createdAt: { type: Date, default: Date.now }
